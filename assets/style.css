@@ -27,8 +27,9 @@
 }
 
 .dropdown-content {
-    display: show;
+    display: none;
     position: absolute;
+    margin-top: 1rem;
     background-color: #f1f1f1;
     min-width: 160px;
     overflow: auto;
@@ -39,3 +40,7 @@
   li{
       list-style-type: none;
   }
+
+.show{
+    display: block;
+}
