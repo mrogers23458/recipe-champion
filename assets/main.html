@@ -7,7 +7,7 @@
     <!-- Foundation Compressed CSS link  -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation.min.css" integrity="sha256-ogmFxjqiTMnZhxCqVmcqTvjfe1Y/ec4WaRj/aQPvn+I=" crossorigin="anonymous">        
     <!--local link to stylesheet-->
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./css/style.css">
     <title>RC Main</title>
 </head>
 <body>
@@ -17,9 +17,8 @@
           <button id="dropBtn" class="menu-icon" type="button"></button>
           <div id="myDropDown" class="dropdown-content">
             <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#home">About</a></li>
-                <li><a href="#home">Contact</a></li>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="/assets/main.html">Recipes</a></li>
             </ul>
 
           </div>
@@ -35,7 +34,7 @@
                 <p class="h1 text-center">Recipe Champion</p>
                 <p class="lead text-center">Enter ingredients and search for new recipes</p>
                 <input id="searchInput" type="text" placeholder="milk, eggs, butter, cinnamon">
-                <button id="search" class="button expanded">Find recipes</button>
+                <button id="main-search" class="button expanded">Find recipes</button>
             </div>
             <!--wrapper for just the search history-->
             <!--append search history to this div-->
@@ -56,9 +55,13 @@
     </div>
     
 
+    <!-- JQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
     <!-- Foundation Compressed JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js" integrity="sha256-pRF3zifJRA9jXGv++b06qwtSqX1byFQOLjqa2PTEb2o=" crossorigin="anonymous"></script>
     <!--local link to javascript-->
-    <script src="./logic.js"></script>
+    <script src="./js/javascript.js"></script>
+
 </body>
 </html>
