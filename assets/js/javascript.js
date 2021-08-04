@@ -1,5 +1,21 @@
+//noticed foundation JS is throwing errors in the console, will add as an issue in github
+// variable to target drop down menu button
+var menuBtn = document.getElementById('dropBtn')
+
+//console log to make sure targeting the right element
+console.log(menuBtn)
+
+// variable to target the find recipe button
+var searchBtn = document.getElementById('search')
+
+//variable for a button that is specific to searching on the main page
+var mainSrchBtn = document.querySelector('main-search')
+
+//drop down menu content holder where items append to
+var dropDownMenu = document.querySelector('.dropdown-content')
+
 // Spoonacular API Key
-const spoonApiKey = "57ad59d77a0f469ab570c2f890ffb990";
+const spoonApiKey = "0dd309d8ae284120be54a47af108d02c";
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
@@ -113,3 +129,28 @@ function processSpoonacularData(data) {
 
 // Add JOTD to landing page
 addJoke();
+
+function printDropMenu(){
+  dropDownMenu.classList.toggle('show')
+  console.log(dropDownMenu)
+}
+//function to redirect to main page
+function goToMain(){
+  window.location.href = "./assets/main.html"
+}
+
+//function to append search results
+function printHistory(){
+
+}
+
+function loadEverything(){
+  goToMain()
+  apiCall()
+}
+
+//on click runs go to main, so when 'find recipes' button with id 'search' is clicked it re-directs to main content page
+
+searchBtn && searchBtn.addEventListener('click', loadEverything)
+mainSrchBtn && mainSrchBtn.addEventListener('click', apiCall)
+menuBtn.addEventListener('click', printDropMenu)
