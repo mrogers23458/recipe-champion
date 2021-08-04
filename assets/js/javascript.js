@@ -139,6 +139,11 @@ function goToMain(){
   window.location.href = "./assets/main.html"
 }
 
+//function to append search results
+function printHistory(){
+
+}
+
 function loadEverything(){
   goToMain()
   apiCall()
@@ -149,5 +154,3 @@ function loadEverything(){
 searchBtn && searchBtn.addEventListener('click', loadEverything)
 mainSrchBtn && mainSrchBtn.addEventListener('click', apiCall)
 menuBtn.addEventListener('click', printDropMenu)
-
-
