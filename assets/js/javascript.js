@@ -86,6 +86,7 @@ function searchByIngredients() {
   apiCall(baseUrl);
 }
 
+// Save last search from Landing Page in localStorage
 function saveSearchInput(searchInput) {
   let ingredientSearchArray = searchInput.replace(/\s/g,'').split(',')
     
@@ -96,6 +97,7 @@ function saveSearchInput(searchInput) {
   }
 }
 
+// Redirect to Main Page with 
 function redirectUrlWithParameters(searchInput) {
   let mainUrl = "./assets/main.html";
   let params = `?ingredients=${searchInput.replace(/\s/g,'')}`;
@@ -106,9 +108,9 @@ function redirectUrlWithParameters(searchInput) {
   return targetUrl;
 }
 
+// Poplulate Main Search input with localstorage
 function populateMainSearch() {
   let lastSearch = JSON.parse(localStorage.getItem('lastSearch'))
-  console.log('lastSearch', lastSearch)
   $('#main-search-input').val(lastSearch.join(', '))
   return lastSearch;
 }
@@ -150,7 +152,6 @@ function processSpoonacularData(data) {
 
 function printDropMenu(){
   dropDownMenu.classList.toggle('show')
-  console.log(dropDownMenu)
 }
 //function to redirect to main page
 function goToMain() {
@@ -161,7 +162,7 @@ function goToMain() {
 
 //function to append search results
 function printHistory(){
-
+  //TODO: Add Function
 }
 
 function loadEverything(){
@@ -169,7 +170,7 @@ function loadEverything(){
   apiCall()
 }
 
-//on click runs go to main, so when 'find recipes' button with id 'search' is clicked it re-directs to main content page
+// Added Button Event Listeners
 menuBtn.on('click', printDropMenu)
 mainSrchBtn && mainSrchBtn.on('click', searchByIngredients);
 findRecipeBtn && findRecipeBtn.on('click', goToMain)
@@ -179,6 +180,7 @@ if (window.location.pathname.endsWith('index.html')) {
   addJoke();
 }
 
+// Functions on switch to Main Page
 if (window.location.pathname.includes('main.html')) {
   populateMainSearch();
   searchByIngredients();
