@@ -3,7 +3,7 @@ const menuBtn = $('#dropBtn')
 const dropDownMenu = document.querySelector('.dropdown-content')
 
 // Global Variables
-var recentSearches = [];
+var lastSearch = [];
 
 // Landing Page Elements
 const findRecipeBtn = $('#land-find-recipe-btn')
@@ -87,18 +87,30 @@ function searchByIngredients() {
 }
 
 function saveSearchInput(searchInput) {
-  recentSearches.push(searchInput)
+  let ingredientSearchArray = searchInput.replace(/\s/g,'').split(',')
+    
   try {
-    localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+    localStorage.setItem('lastSearch', JSON.stringify(ingredientSearchArray));
   } catch (error) {
     console.log(error)
   }
 }
 
+function redirectUrlWithParameters(searchInput) {
+  let mainUrl = "./assets/main.html";
+  let params = `?ingredients=${searchInput.replace(/\s/g,'')}`;
+  let targetUrl = mainUrl + params;
+
+  window.location.href = targetUrl;
+  
+  return targetUrl;
+}
+
 function populateMainSearch() {
-  let recentSearches = JSON.parse(localStorage.getItem('recentSearches'))
-  $('#main-search-input').text(recentSearches.join(', '))
-  return recentSearches;
+  let lastSearch = JSON.parse(localStorage.getItem('lastSearch'))
+  console.log('lastSearch', lastSearch)
+  $('#main-search-input').val(lastSearch.join(', '))
+  return lastSearch;
 }
 
 // Create full request url w/optional additional parameters for a Spoonacular API call
@@ -141,10 +153,10 @@ function printDropMenu(){
   console.log(dropDownMenu)
 }
 //function to redirect to main page
-function goToMain(){
-  saveSearchInput($('#land-input').val());
-  window.location.href = "./assets/main.html";
-  populateMainSearch();
+function goToMain() {
+  let inputValue = $('#land-input').val()
+  saveSearchInput(inputValue);
+  redirectUrlWithParameters(inputValue);
 }
 
 //function to append search results
@@ -165,4 +177,9 @@ findRecipeBtn && findRecipeBtn.on('click', goToMain)
 // Add JOTD to landing page
 if (window.location.pathname.endsWith('index.html')) {
   addJoke();
+}
+
+if (window.location.pathname.includes('main.html')) {
+  populateMainSearch();
+  searchByIngredients();
 }
