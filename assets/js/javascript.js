@@ -1,15 +1,15 @@
 //noticed foundation JS is throwing errors in the console, will add as an issue in github
 // variable to target drop down menu button
-var menuBtn = document.getElementById('dropBtn')
+var menuBtn = $('#dropBtn')
 
 //console log to make sure targeting the right element
 console.log(menuBtn)
 
 // variable to target the find recipe button
-var searchBtn = document.getElementById('search')
+var searchBtn = $('#search')
 
 //variable for a button that is specific to searching on the main page
-var mainSrchBtn = document.querySelector('main-search')
+var mainSrchBtn = $('main-search')
 
 //drop down menu content holder where items append to
 var dropDownMenu = document.querySelector('.dropdown-content')
@@ -84,8 +84,16 @@ function addJoke() {
 }
 
 // Event listener for Landing page get ingredients button
-btnExpandedEl.on('click', function() {
-  const ingredientInputEl = $('#search');
+// btnExpandedEl.on('click', function() {
+//   const ingredientInputEl = $('#search');
+//   let ingredientsArray = ingredientInputEl.val().replace(/\s/g,'').split(',');
+//   let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
+
+//   apiCall(baseUrl);
+// });
+
+mainSrchBtn && mainSrchBtn.on('click', function() {
+  const ingredientInputEl = $('#searchInput');
   let ingredientsArray = ingredientInputEl.val().replace(/\s/g,'').split(',');
   let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
 
@@ -127,9 +135,6 @@ function processSpoonacularData(data) {
   return data;
 }
 
-// Add JOTD to landing page
-addJoke();
-
 function printDropMenu(){
   dropDownMenu.classList.toggle('show')
   console.log(dropDownMenu)
@@ -151,6 +156,11 @@ function loadEverything(){
 
 //on click runs go to main, so when 'find recipes' button with id 'search' is clicked it re-directs to main content page
 
-searchBtn && searchBtn.addEventListener('click', loadEverything)
-mainSrchBtn && mainSrchBtn.addEventListener('click', apiCall)
-menuBtn.addEventListener('click', printDropMenu)
+searchBtn && searchBtn.on('click', loadEverything)
+// mainSrchBtn && mainSrchBtn.on('click', apiCall)
+menuBtn.on('click', printDropMenu)
+
+// Add JOTD to landing page
+if (window.location.pathname.endsWith('index.html')) {
+  addJoke();
+}
