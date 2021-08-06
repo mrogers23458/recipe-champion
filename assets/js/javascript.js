@@ -1,21 +1,20 @@
-//noticed foundation JS is throwing errors in the console, will add as an issue in github
-// variable to target drop down menu button
-var menuBtn = $('#dropBtn')
+// Global Page Elements
+const menuBtn = $('#dropBtn')
+const dropDownMenu = document.querySelector('.dropdown-content')
 
-//console log to make sure targeting the right element
-console.log(menuBtn)
+// Global Variables
+var recentSearches = [];
 
-// variable to target the find recipe button
-var searchBtn = $('#search')
+// Landing Page Elements
+const findRecipeBtn = $('#land-find-recipe-btn')
+const leadEl = $('#lead');
 
-//variable for a button that is specific to searching on the main page
-var mainSrchBtn = $('main-search')
-
-//drop down menu content holder where items append to
-var dropDownMenu = document.querySelector('.dropdown-content')
+// Main Page Elements
+const mainSrchBtn = $('#main-search-btn')
+const mainSrchInput = $('#main-search-input')
 
 // Spoonacular API Key
-const spoonApiKey = "0dd309d8ae284120be54a47af108d02c";
+const spoonApiKey = "c0b01345b7484f1b90b89bab3999317f";
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
@@ -65,10 +64,6 @@ var spoonacularUrls = {
   },
 }
 
-// Landing Page Elements
-const btnExpandedEl = $('.button');
-const leadEl = $('.lead');
-
 // Add Joke of the Day
 function addJoke() {
   const jokeEl = $('<p>').addClass('joke h3 text-center');
@@ -83,22 +78,28 @@ function addJoke() {
   jokeEl.insertBefore(leadEl)
 }
 
-// Event listener for Landing page get ingredients button
-// btnExpandedEl.on('click', function() {
-//   const ingredientInputEl = $('#search');
-//   let ingredientsArray = ingredientInputEl.val().replace(/\s/g,'').split(',');
-//   let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
-
-//   apiCall(baseUrl);
-// });
-
-mainSrchBtn && mainSrchBtn.on('click', function() {
-  const ingredientInputEl = $('#searchInput');
-  let ingredientsArray = ingredientInputEl.val().replace(/\s/g,'').split(',');
+// Search By Ingredients
+function searchByIngredients() {
+  let ingredientsArray = mainSrchInput.val().replace(/\s/g,'').split(',');
   let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
 
   apiCall(baseUrl);
-});
+}
+
+function saveSearchInput(searchInput) {
+  recentSearches.push(searchInput)
+  try {
+    localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+function populateMainSearch() {
+  let recentSearches = JSON.parse(localStorage.getItem('recentSearches'))
+  $('#main-search-input').text(recentSearches.join(', '))
+  return recentSearches;
+}
 
 // Create full request url w/optional additional parameters for a Spoonacular API call
 function apiCall(baseUrl, params = {}) {
@@ -141,7 +142,9 @@ function printDropMenu(){
 }
 //function to redirect to main page
 function goToMain(){
-  window.location.href = "./assets/main.html"
+  saveSearchInput($('#land-input').val());
+  window.location.href = "./assets/main.html";
+  populateMainSearch();
 }
 
 //function to append search results
@@ -155,10 +158,9 @@ function loadEverything(){
 }
 
 //on click runs go to main, so when 'find recipes' button with id 'search' is clicked it re-directs to main content page
-
-searchBtn && searchBtn.on('click', loadEverything)
-// mainSrchBtn && mainSrchBtn.on('click', apiCall)
 menuBtn.on('click', printDropMenu)
+mainSrchBtn && mainSrchBtn.on('click', searchByIngredients);
+findRecipeBtn && findRecipeBtn.on('click', goToMain)
 
 // Add JOTD to landing page
 if (window.location.pathname.endsWith('index.html')) {
