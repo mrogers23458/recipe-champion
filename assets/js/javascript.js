@@ -153,7 +153,6 @@ function apiCall(baseUrl, params = {}) {
     // OR pass data to new function to handle various API requests
     console.log(data);
     processSpoonacularData(data);
-    recipeCardBuild(data);
     return data;
   }).catch((err) => {
     console.log(err);
@@ -162,6 +161,7 @@ function apiCall(baseUrl, params = {}) {
 
 function processSpoonacularData(data) {
   // TODO: Expand to handle various API calls
+  recipeCardBuild(data);
   console.log(data)
   //return data; //<--don't think this is necessary, unless the call needs it for something
 }
@@ -209,7 +209,7 @@ $('#rebuildCards').click( function rebuildCards () {
 });
 //Build cards when called
 function recipeCardBuild (array) {
-    localStorage.setItem('queryArray', JSON.stringify(data));
+    localStorage.setItem('queryArray', JSON.stringify(array));
     $('.recipeCard').remove();
       array.forEach ((element,index,array) => {
         newRecipeCard = $('<div class="recipeCard" name="recipe '+element.id+'"></div>');
@@ -234,7 +234,7 @@ menuBtn.on('click', printDropMenu)
 mainSrchBtn && mainSrchBtn.on('click', searchAndSave);
 findRecipeBtn && findRecipeBtn.on('click', goToMain)
 
-// Add JOTD to landing page
+// Add JOTD to landing page, check if 24hours has passed since last call
 if (window.location.pathname.endsWith('index.html')) {
   if (localStorage.getItem('day1') == null) { 
     localStorage.setItem('day1', Date.now());
