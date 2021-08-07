@@ -151,6 +151,8 @@ function apiCall(baseUrl, params = {}) {
 
 function processSpoonacularData(data) {
   // TODO: Expand to handle various API calls
+  localStorage.setItem('queryArray', JSON.stringify(data));
+  recipeCardBuild(data);
   console.log(data)
   return data;
 }
@@ -186,6 +188,38 @@ historyBox.on('click', function(e){
 
 
 })
+
+/*Rebuilder button for dev purposes (or to keep?), 
+will use a localy store search result array to build cards 
+again without a new query*/
+$('#rebuildCards').click( function rebuildCards () {
+  if ( localStorage.getItem('queryArray') != null) {
+    savedData = JSON.parse(localStorage.getItem('queryArray'));
+    recipeCardBuild(savedData);
+  } else {
+    console.log('No saved data');
+  }
+});
+//Build cards when called
+function recipeCardBuild (array) {
+  $('.recipeCard').remove();
+    array.forEach ((element,index,array) => {
+      newRecipeCard = $('<div class="recipeCard" name="recipe '+element.id+'"></div>');
+      newRecipeTitle = $('<h3 class="recipeTitle">'+element.title+'</h3>');
+      newRecipeImage = $('<img class="recipeImage" src='+element.image+'>');
+      newRecipeOl = $('<ol class="ingredientList" name="recipe '+element.id+'"></ol>');
+      newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
+      element.usedIngredients.forEach((ele,i,arr) => {
+        newRecipeIngUsed = $('<li class="usedIngredient" aisle="'+ele.aisle+'">'+ele.originalString+'</li>');
+        newRecipeOl.append(newRecipeIngUsed);
+      })
+      element.missedIngredients.forEach((ele2,i2,arr2) => {
+        newRecipeIngMiss = $('<li class="missIngredient" aisle="'+ele2.aisle+'">'+ele2.originalString+'</li>');
+        newRecipeOl.append(newRecipeIngMiss);
+      })
+      $('#recipeContainer').append(newRecipeCard);
+    })
+}
 
 // Added Button Event Listeners
 menuBtn.on('click', printDropMenu)

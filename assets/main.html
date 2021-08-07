@@ -18,26 +18,28 @@
           <div id="myDropDown" class="dropdown-content">
             <ul>
                 <li><a href="../index.html">Home</a></li>
-                <li><a href="/assets/main.html">Recipes</a></li>
+                <li><a href="main.html">Recipes</a></li>
             </ul>
 
           </div>
           <span class="title-bar-title">Recipe Champion</span>
+        </div>
+        <div class="title-bar-right">
+            <button id="rebuildCards" type="button">Rebuild Cards</button>
         </div>
     </div>
     <!--Wraps all of the content on the main page-->
     <div class="main-content-wrapper">
         <!--wrapper for both search box and search history-->
         <div class="search-history-container">
+            <!--Container for left side-->
             <!-- wrapper for just the search box-->
             <div class="search-wrapper">
                 <p class="h1 text-center">Recipe Champion</p>
                 <p class="lead text-center">Enter ingredients and search for new recipes</p>
                 <input id="main-search-input" type="text" placeholder="milk, eggs, butter, cinnamon">
                 <button id="main-search-btn" class="button expanded">Find recipes</button>
-            </div>
             <!--wrapper for just the search history-->
-            <div class="history-wrapper">
             </div>
         </div>
         <!--Foundation CSS-->
@@ -49,6 +51,8 @@
                     <!--dynamically generated content should be given this class, or appended here-->
                     <img class="work-feature-block-image" src="./sampleWordCloudImage.jpg"/>
                 </div>
+                <!--Container to be popluated by recipe cards-->
+                <div id="recipeContainer"></div>
             </div>
         </div>
     </div>
