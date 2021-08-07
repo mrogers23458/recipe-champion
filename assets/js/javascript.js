@@ -88,8 +88,13 @@ btnExpandedEl.on('click', function() {
   let ingredientsArray = ingredientInputEl.val().replace(/\s/g,'').split(',');
   let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
   
+  //appends searches to search history box
   let historyBox = $('.history-wrapper');
   historyBox.append(`<p>${ingredientsArray}</p>`)
+  
+  //sets local storage to the most recent search
+  localStorage.setItem('srchHistory', ingredientsArray)
+
 
   apiCall(baseUrl);
 
