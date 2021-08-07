@@ -48,6 +48,7 @@
 .show{
     display: block;
 }
+<<<<<<< HEAD
 
 .history-card{
     background: cornflowerblue;
@@ -57,3 +58,5 @@
     box-shadow: 5px 5px 5px;
     text-align: center;
 }
+=======
+>>>>>>> main
