@@ -83,14 +83,14 @@ function addJoke() {
 }
 
 // Event listener for Landing page get ingredients button
-btnExpandedEl.on('click', function() {
+btnExpandedEl.on('click', function(e) {
   const ingredientInputEl = $('#searchInput');
   let ingredientsArray = ingredientInputEl.val().replace(/\s/g,'').split(',');
   let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
   
   //appends searches to search history box
   let historyBox = $('.history-wrapper');
-  historyBox.append(`<p>${ingredientsArray}</p>`)
+  historyBox.append(`<div class='history-card'><p>${ingredientsArray}</p></div>`)
   
   //sets local storage to the most recent search
   localStorage.setItem('srchHistory', ingredientsArray)
