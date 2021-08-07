@@ -48,9 +48,8 @@
 .show{
     display: block;
 }
-<<<<<<< HEAD
 
-.history-card{
+#history-card {
     background: cornflowerblue;
     font-size: 1.5rem;
     border-radius: 10px;
@@ -58,5 +57,3 @@
     box-shadow: 5px 5px 5px;
     text-align: center;
 }
-=======
->>>>>>> main
