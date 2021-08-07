@@ -1,6 +1,7 @@
 // Global Page Elements
 const menuBtn = $('#dropBtn')
 const dropDownMenu = document.querySelector('.dropdown-content')
+const historyBox = $('.history-wrapper');
 
 // Global Variables
 var lastSearch = [];
@@ -14,7 +15,7 @@ const mainSrchBtn = $('#main-search-btn')
 const mainSrchInput = $('#main-search-input')
 
 // Spoonacular API Key
-const spoonApiKey = "";
+const spoonApiKey = "0dd309d8ae284120be54a47af108d02c";
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
@@ -82,6 +83,10 @@ function addJoke() {
 function searchByIngredients() {
   let ingredientsArray = mainSrchInput.val().replace(/\s/g,'').split(',');
   let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
+
+  //sets local storage to the most recent search
+  localStorage.setItem('srchHistory', ingredientsArray)
+
 
   apiCall(baseUrl);
 }
@@ -162,15 +167,27 @@ function goToMain() {
   redirectUrlWithParameters(inputValue);
 }
 
+// function to do a search by ingredients, and append the search terms to the history box
+function searchAndSave(){
+  searchByIngredients()
+  printHistory()
+}
+
 //function to append search results
 function printHistory(){
   //TODO: Add Function
+    //appends searches to search history box
+    let ingredientsArray = mainSrchInput.val().replace(/\s/g,'').split(',');
+    historyBox.append(`<div id='history-card'><p>${ingredientsArray}</p></div>`)
+    
 }
 
-function loadEverything(){
-  goToMain()
-  apiCall()
-}
+historyBox.on('click', function(e){
+  let clickValue = e.target.textContent
+  searchByIngredients(clickValue)
+
+
+})
 
 /*Rebuilder button for dev purposes (or to keep?), 
 will use a localy store search result array to build cards 
@@ -206,7 +223,7 @@ function recipeCardBuild (array) {
 
 // Added Button Event Listeners
 menuBtn.on('click', printDropMenu)
-mainSrchBtn && mainSrchBtn.on('click', searchByIngredients);
+mainSrchBtn && mainSrchBtn.on('click', searchAndSave);
 findRecipeBtn && findRecipeBtn.on('click', goToMain)
 
 // Add JOTD to landing page

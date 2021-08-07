@@ -15,11 +15,16 @@
 .cell{
     width: 40vw;
 }
+.main-content-wrapper{
+    display: flex;
+}
 
 .search-history-container {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30%;
     justify-content: center;
-    width: 100%;
     margin:  1rem;
 }
 
@@ -56,6 +61,15 @@ li {
 
 .show {
     display: block;
+}
+
+#history-card {
+    background: cornflowerblue;
+    font-size: 1.5rem;
+    border-radius: 10px;
+    width: 20vw;
+    box-shadow: 5px 5px 5px;
+    text-align: center;
 }
 
 /* Tucker - Don't need to keep any styling the same, the flex box and width stuff is
