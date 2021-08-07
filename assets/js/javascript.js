@@ -2,6 +2,13 @@
 const menuBtn = $('#dropBtn')
 const dropDownMenu = document.querySelector('.dropdown-content')
 const historyBox = $('.history-wrapper');
+//tags variable for word cloud
+var myTags = [
+  'JavaScript', 'CSS', 'HTML',
+  'Angualr', 'VueJS', 'React',
+  'Python', 'Go', 'Chrome',
+  'Edge', 'Firefox', 'Safari',
+];
 
 // Global Variables
 var lastSearch = [];
@@ -152,6 +159,7 @@ function apiCall(baseUrl, params = {}) {
 function processSpoonacularData(data) {
   // TODO: Expand to handle various API calls
   console.log(data)
+  
   return data;
 }
 
@@ -202,3 +210,5 @@ if (window.location.pathname.includes('main.html')) {
   populateMainSearch();
   searchByIngredients();
 }
+
+
