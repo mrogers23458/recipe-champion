@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-//noticed foundation JS is throwing errors in the console, will add as an issue in github
-// variable to target drop down menu button
-var menuBtn = document.getElementById('dropBtn')
-var searchInputEl = document.getElementById('search-input')
-//variable for the container that will hold the search history
-var historyContainerEl = document.getElementById('history-wrapper')
-// variable to target the find recipe button
-var searchBtn = document.getElementById('search')
-
-//variable for a button that is specific to searching on the main page
-var mainSrchBtn = document.getElementById('main-search')
-=======
 // Global Page Elements
 const menuBtn = $('#dropBtn')
 const dropDownMenu = document.querySelector('.dropdown-content')
@@ -21,7 +8,6 @@ var lastSearch = [];
 // Landing Page Elements
 const findRecipeBtn = $('#land-find-recipe-btn')
 const leadEl = $('#lead');
->>>>>>> main
 
 // Main Page Elements
 const mainSrchBtn = $('#main-search-btn')
@@ -92,31 +78,18 @@ function addJoke() {
   jokeEl.insertBefore(leadEl)
 }
 
-<<<<<<< HEAD
-// Event listener for Landing page get ingredients button
-btnExpandedEl.on('click', function(e) {
-  const ingredientInputEl = $('#searchInput');
-  let ingredientsArray = ingredientInputEl.val().replace(/\s/g,'').split(',');
-=======
 // Search By Ingredients
 function searchByIngredients() {
   let ingredientsArray = mainSrchInput.val().replace(/\s/g,'').split(',');
->>>>>>> main
   let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
-  
-  //appends searches to search history box
-  let historyBox = $('.history-wrapper');
-  historyBox.append(`<div class='history-card'><p>${ingredientsArray}</p></div>`)
-  
+
+  printHistory(ingredientsArray)
+
   //sets local storage to the most recent search
   localStorage.setItem('srchHistory', ingredientsArray)
 
 
   apiCall(baseUrl);
-<<<<<<< HEAD
-
-});
-=======
 }
 
 // Save last search from Landing Page in localStorage
@@ -147,7 +120,6 @@ function populateMainSearch() {
   $('#main-search-input').val(lastSearch.join(', '))
   return lastSearch;
 }
->>>>>>> main
 
 // Create full request url w/optional additional parameters for a Spoonacular API call
 function apiCall(baseUrl, params = {}) {
@@ -195,23 +167,14 @@ function goToMain() {
 }
 
 //function to append search results
-function printHistory(){
+function printHistory(historyArray){
   //TODO: Add Function
+    //appends searches to search history box
+    let historyBox = $('.history-wrapper');
+    historyBox.append(`<div class='history-card'><p>${historyArray}</p></div>`)
+    
 }
 
-//function to create a search history
-function printHistory(){
-  console.log('test me')
-
-}
-
-<<<<<<< HEAD
-
-//on click runs go to main, so when 'find recipes' button with id 'search' is clicked it re-directs to main content page
-
-
-menuBtn.addEventListener('click', printDropMenu)
-=======
 // Added Button Event Listeners
 menuBtn.on('click', printDropMenu)
 mainSrchBtn && mainSrchBtn.on('click', searchByIngredients);
@@ -221,7 +184,6 @@ findRecipeBtn && findRecipeBtn.on('click', goToMain)
 if (window.location.pathname.endsWith('index.html')) {
   addJoke();
 }
->>>>>>> main
 
 // Functions on switch to Main Page
 if (window.location.pathname.includes('main.html')) {
