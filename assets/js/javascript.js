@@ -1,15 +1,14 @@
 //noticed foundation JS is throwing errors in the console, will add as an issue in github
 // variable to target drop down menu button
 var menuBtn = document.getElementById('dropBtn')
-
-//console log to make sure targeting the right element
-console.log(menuBtn)
-
+var searchInputEl = document.getElementById('search-input')
+//variable for the container that will hold the search history
+var historyContainerEl = document.getElementById('history-wrapper')
 // variable to target the find recipe button
 var searchBtn = document.getElementById('search')
 
 //variable for a button that is specific to searching on the main page
-var mainSrchBtn = document.querySelector('main-search')
+var mainSrchBtn = document.getElementById('main-search')
 
 //drop down menu content holder where items append to
 var dropDownMenu = document.querySelector('.dropdown-content')
@@ -85,11 +84,15 @@ function addJoke() {
 
 // Event listener for Landing page get ingredients button
 btnExpandedEl.on('click', function() {
-  const ingredientInputEl = $('#search');
+  const ingredientInputEl = $('#searchInput');
   let ingredientsArray = ingredientInputEl.val().replace(/\s/g,'').split(',');
   let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
+  
+  let historyBox = $('.history-wrapper');
+  historyBox.append(`<p>${ingredientsArray}</p>`)
 
   apiCall(baseUrl);
+
 });
 
 // Create full request url w/optional additional parameters for a Spoonacular API call
@@ -139,15 +142,15 @@ function goToMain(){
   window.location.href = "./assets/main.html"
 }
 
-function loadEverything(){
-  goToMain()
-  apiCall()
+//function to create a search history
+function printHistory(){
+  console.log('test me')
+
 }
+
 
 //on click runs go to main, so when 'find recipes' button with id 'search' is clicked it re-directs to main content page
 
-searchBtn && searchBtn.addEventListener('click', loadEverything)
-mainSrchBtn && mainSrchBtn.addEventListener('click', apiCall)
-menuBtn.addEventListener('click', printDropMenu)
 
+menuBtn.addEventListener('click', printDropMenu)
 

@@ -9,11 +9,15 @@
 .cell{
     width: 40vw;
 }
+.main-content-wrapper{
+    display: flex;
+}
 
 .search-history-container{
     display: flex;
-    justify-content: center;
-    width: 95%;
+    flex-direction: column;
+    align-items: center;
+    width: 30%;
     margin:  1rem;
 }
 
