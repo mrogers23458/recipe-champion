@@ -1,10 +1,14 @@
-//word cloud default values variable
+//word cloud global variables
 const myTags = [];
+const wordcloudDivEl = $('#wordCloudHolderEl')
+console.log(wordcloudDivEl)
+var test = document.querySelector('.content')
 
 // Global Page Elements
 const menuBtn = $('#dropBtn')
 const dropDownMenu = document.querySelector('.dropdown-content')
 const historyBox = $('.history-wrapper');
+
 
 
 // Global Variables
@@ -169,6 +173,9 @@ function processSpoonacularData(data) {
 // actual function to populate wordcloud
 function populateWordCloud(data){
   //iteration for 10 recipes
+  const myTags = []
+  test.innerHTML = ''
+
   for(i=0; i < 10; i++){
     var recipesArray = data[i].title
       myTags.push(recipesArray)
@@ -267,7 +274,13 @@ function recipeCardBuild (array) {
 menuBtn.on('click', printDropMenu)
 mainSrchBtn && mainSrchBtn.on('click', searchAndSave);
 findRecipeBtn && findRecipeBtn.on('click', goToMain)
+// added wordcloud event listener
 
+console.log(wordcloudDivEl)
+wordcloudDivEl.on('click', function(e){
+  console.log(e.target)
+  console.log(e.target.textContent)
+})
 // Add JOTD to landing page
 if (window.location.pathname.endsWith('index.html')) {
   addJoke();
