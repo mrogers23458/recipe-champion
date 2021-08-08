@@ -13,6 +13,7 @@ const leadEl = $('#lead');
 // Main Page Elements
 const mainSrchBtn = $('#main-search-btn')
 const mainSrchInput = $('#main-search-input')
+const recipeContainer = $('#recipeContainer')
 
 // Spoonacular API Key
 const spoonApiKey = "c0b01345b7484f1b90b89bab3999317f";
@@ -80,13 +81,8 @@ function addJoke() {
 }
 
 // Search By Ingredients
-function searchByIngredients() {
-  let ingredientsArray = mainSrchInput.val().replace(/\s/g,'').split(',');
+function searchByIngredients(ingredientsArray) {
   let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
-
-  //sets local storage to the most recent search
-  localStorage.setItem('srchHistory', ingredientsArray)
-
 
   apiCall(baseUrl);
 }
@@ -144,15 +140,15 @@ function apiCall(baseUrl, params = {}) {
     // OR pass data to new function to handle various API requests
     processSpoonacularData(data);
     return data;
-  }).catch((err) => {
-    console.log(err);
+  }).catch((error) => {
+    console.log(error);
   });
 }
 
 function processSpoonacularData(data) {
   // TODO: Expand to handle various API calls
   localStorage.setItem('queryArray', JSON.stringify(data));
-  recipeCardBuild(data);
+  buildAllCards(data);
   console.log(data)
   return data;
 }
@@ -160,6 +156,7 @@ function processSpoonacularData(data) {
 function printDropMenu(){
   dropDownMenu.classList.toggle('show')
 }
+
 //function to redirect to main page
 function goToMain() {
   let inputValue = $('#land-input').val()
@@ -169,50 +166,79 @@ function goToMain() {
 
 // function to do a search by ingredients, and append the search terms to the history box
 function searchAndSave(){
-  searchByIngredients()
-  printHistory()
+  let ingredientsArray = mainSrchInput.val().replace(/\s/g,'').split(',');
+  searchByIngredients(ingredientsArray)
+  printHistory(ingredientsArray)
 }
 
 //function to append search results
-function printHistory(){
-  //TODO: Add Function
+function printHistory(ingredientsArray) {
     //appends searches to search history box
-    let ingredientsArray = mainSrchInput.val().replace(/\s/g,'').split(',');
     historyBox.append(`<div id='history-card'><p>${ingredientsArray}</p></div>`)
     
+    //sets local storage to the most recent search
+    localStorage.setItem('srchHistory', ingredientsArray)
 }
 
-historyBox.on('click', function(e){
-  let clickValue = e.target.textContent
-  searchByIngredients(clickValue)
-})
-
-/*Rebuilder button for dev purposes (or to keep?), 
-will use a localy store search result array to build cards 
-again without a new query*/
-$('#rebuildCards').click( function rebuildCards () {
+function getStoredQuery() {
   if ( localStorage.getItem('queryArray') != null) {
-    savedData = JSON.parse(localStorage.getItem('queryArray'));
-    recipeCardBuild(savedData);
+    var savedData = JSON.parse(localStorage.getItem('queryArray'));
   } else {
     console.log('No saved data');
   }
-});
+  return savedData;
+}
+
+// Recipe Card Class 
+class RecipeCard {
+  constructor(recipeObject) {
+    this.id = recipeObject.id;
+    this.title = recipeObject.title;
+    this.image = recipeObject.image;
+    this.imageType = recipeObject.imageType;
+    this.likes = recipeObject.likes;
+    this.missedIngredientCount = recipeObject.missedIngredientCount;
+    this.missedIngredients = recipeObject.missedIngredients;
+    this.unusedIngredients = recipeObject.unusedIngredients;
+    this.usedIngredientCount = recipeObject.usedIngredientCount;
+    this.usedIngredients = recipeObject.usedIngredients;
+
+    this.buildCardById = function buildCardById() {
+      // Build Card Elements with data provided by the Spoonacular API
+      let newRecipeCard = $('<div class="recipeCard" name="recipe '+this.id+'"></div>');
+      let newRecipeTitle = $('<h3 class="recipeTitle">'+this.title+'</h3>');
+      let newRecipeImage = $('<img class="recipeImage" src='+this.image+'>');
+      let newRecipeOl = $('<ol class="ingredientList" name="recipe '+this.id+'"></ol>');
+      newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
+      this.usedIngredients.forEach((ele) => {
+        newRecipeIngUsed = $('<li class="usedIngredient" aisle="'+ele.aisle+'">'+ele.originalString+'</li>');
+        newRecipeOl.append(newRecipeIngUsed);
+      })
+      this.missedIngredients.forEach((ele2) => {
+        newRecipeIngMiss = $('<li class="missIngredient" aisle="'+ele2.aisle+'">'+ele2.originalString+'</li>');
+        newRecipeOl.append(newRecipeIngMiss);
+      })
+
+      // Append Card to the Recipe Compare Container
+      $('#recipe-compare-container').append(newRecipeCard);
+    };
+  }
+}
 
 //Build cards when called
-function recipeCardBuild (array) {
+function buildAllCards (recipesArray) {
   $('.recipeCard').remove();
-    array.forEach ((element,index,array) => {
-      newRecipeCard = $('<div class="recipeCard" name="recipe '+element.id+'"></div>');
+    recipesArray.forEach ((element) => {
+      newRecipeCard = $('<div class="recipeCard" name='+element.id+' "></div>');
       newRecipeTitle = $('<h3 class="recipeTitle">'+element.title+'</h3>');
       newRecipeImage = $('<img class="recipeImage" src='+element.image+'>');
       newRecipeOl = $('<ol class="ingredientList" name="recipe '+element.id+'"></ol>');
       newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
-      element.usedIngredients.forEach((ele,i,arr) => {
+      element.usedIngredients.forEach((ele) => {
         newRecipeIngUsed = $('<li class="usedIngredient" aisle="'+ele.aisle+'">'+ele.originalString+'</li>');
         newRecipeOl.append(newRecipeIngUsed);
       })
-      element.missedIngredients.forEach((ele2,i2,arr2) => {
+      element.missedIngredients.forEach((ele2) => {
         newRecipeIngMiss = $('<li class="missIngredient" aisle="'+ele2.aisle+'">'+ele2.originalString+'</li>');
         newRecipeOl.append(newRecipeIngMiss);
       })
@@ -220,19 +246,29 @@ function recipeCardBuild (array) {
     })
 }
 
-// Get Recipies by Id
+// Get Recipie by Id
 function getRecipeById(id) {
-  // Search Most Recent ApiCall for Id
-  // Return needed Recipe info by Id
-  // 
-}
+  let savedData = getStoredQuery();
+  let recipeObject = savedData.find(recipe => {
+    return recipe.id == id;
+  })
+  let newRecipeCard = new RecipeCard(recipeObject);
 
-function getAllRecipes(re)
+  newRecipeCard.buildCardById()
+}
 
 // Added Button Event Listeners
 menuBtn.on('click', printDropMenu)
 mainSrchBtn && mainSrchBtn.on('click', searchAndSave);
-findRecipeBtn && findRecipeBtn.on('click', goToMain)
+findRecipeBtn && findRecipeBtn.on('click', goToMain);
+recipeContainer && recipeContainer.on('click', (event) => {
+  let recipeId = $(event.target).attr('name')
+  getRecipeById(recipeId)
+});
+historyBox.on('click', function(event){
+  let clickValue = event.target.textContent
+  searchByIngredients(clickValue)
+});
 
 // Add JOTD to landing page
 if (window.location.pathname.endsWith('index.html')) {
@@ -241,6 +277,27 @@ if (window.location.pathname.endsWith('index.html')) {
 
 // Functions on switch to Main Page
 if (window.location.pathname.includes('main.html')) {
-  populateMainSearch();
-  searchByIngredients();
+  let ingredientsList = populateMainSearch();
+  searchByIngredients(ingredientsList);
 } 
+
+// DEBUG Tools:
+//
+//
+/*Rebuilder button for dev purposes (or to keep?), 
+will use a localy store search result array to build cards 
+again without a new query*/
+$('#rebuildCards').on('click', rebuildCards);
+
+function rebuildCards() {
+  let savedData = getStoredQuery();
+  buildAllCards(savedData);
+}
+
+const recipeBtn = $('#temp-recipe-btns');
+
+recipeBtn && recipeBtn.on('click', (event) => {
+  getRecipeById(633265); // 633265 "Bacon & Egg Toast Cups"
+});
+
+// DEBUG END
