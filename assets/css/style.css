@@ -102,8 +102,7 @@ with what spoontacular gives us. Selectors for applying styles are important */
 
 [class^="recipe-compare-card"] {
     flex: 0 1 50%;
-    min-height: 300px;
-    border: 2px solid black; /* Temporary border for debug*/
+    min-height: 500px;
 }
 
 #recipeContainer {

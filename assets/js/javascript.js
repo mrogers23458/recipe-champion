@@ -1,22 +1,25 @@
 // Global Page Elements
-const menuBtn = $('#dropBtn')
-const dropDownMenu = document.querySelector('.dropdown-content')
+const menuBtn = $('#dropBtn');
+const dropDownMenu = document.querySelector('.dropdown-content');
 const historyBox = $('.history-wrapper');
 
 // Global Variables
 var lastSearch = [];
 
 // Landing Page Elements
-const findRecipeBtn = $('#land-find-recipe-btn')
+const findRecipeBtn = $('#land-find-recipe-btn');
 const leadEl = $('#lead');
 
 // Main Page Elements
-const mainSrchBtn = $('#main-search-btn')
-const mainSrchInput = $('#main-search-input')
-const recipeContainer = $('#recipeContainer')
+const mainSrchBtn = $('#main-search-btn');
+const mainSrchInput = $('#main-search-input');
+const recipeContainer = $('#recipeContainer');
+const recipeCompareContainer = $('#recipe-compare-container');
+const slot1 = $('.recipe-compare-card-1');
+const slot2 = $('.recipe-compare-card-2');
 
 // Spoonacular API Key
-const spoonApiKey = "c0b01345b7484f1b90b89bab3999317f";
+const spoonApiKey = "";
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
@@ -259,16 +262,29 @@ function getRecipeById(id) {
 
 // Compare Section Logic
 function compareSlotSelect(recipeId) {
-  let recipeCard = getRecipeById(recipeId)
+  let recipeCard = getRecipeById(recipeId);
+
 
   // Append Card to the Recipe Compare Container
-  if ( $('.recipe-compare-card-1').children().length < 1) {
-    $('.recipe-compare-card-1').append(recipeCard);
+  if ( slot1.children().length < 1) {
+    slot1.addClass('focus').append(recipeCard);
     
-  } else if ( $('.recipe-compare-card-2').children().length < 1){
-    $('.recipe-compare-card-2').append(recipeCard);
+  } else if ( slot2.children().length < 1){
+    slot2.addClass('focus').append(recipeCard);
+
   } else {
-    // Select Slot By Focus
+    // Select Slot By Last Focus
+    if (lastFocusedSlot === 1) {
+      slot1.children().remove();
+      slot1.append(recipeCard);
+
+    } else if (lastFocusedSlot === 2) {
+      slot2.children().remove();
+      slot2.append(recipeCard);
+
+    } else {
+      return;
+    }
   }
 }
 
@@ -276,6 +292,19 @@ function compareSlotSelect(recipeId) {
 menuBtn.on('click', printDropMenu)
 mainSrchBtn && mainSrchBtn.on('click', searchAndSave);
 findRecipeBtn && findRecipeBtn.on('click', goToMain);
+
+recipeCompareContainer && recipeCompareContainer.on('click', (event) => {
+  console.log(slot1.has($(event.target)))
+  console.log(slot2.has($(event.target)))
+  if (slot1.has($(event.target))) {
+    slot2.removeClass('focus');
+    slot1.addClass('focus');
+  } else if (slot2.has($(event.target))) {
+    slot1.removeClass('focus');
+    slot2.addClass('focus');
+  }
+})
+
 recipeContainer && recipeContainer.on('click', (event) => {
   let recipeId = $(event.target).attr('data-id');
 
