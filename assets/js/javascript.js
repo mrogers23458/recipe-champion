@@ -16,7 +16,7 @@ const mainSrchInput = $('#main-search-input')
 const recipeContainer = $('#recipeContainer')
 
 // Spoonacular API Key
-const spoonApiKey = "c0b01345b7484f1b90b89bab3999317f";
+const spoonApiKey = "";
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
