@@ -20,18 +20,17 @@
 }
 
 .search-history-container {
-    display: flex;
+    flex: 1 1 100%;
     flex-direction: column;
     align-items: center;
-    width: 30%;
     margin:  1rem;
 }
 
 .search-wrapper {
-    display: flex;
+    flex: 1 1 100%;
     flex-direction: column;
     justify-content: flex-start;
-    width: 30%;
+    width: 100%;
 }
 
 .row{

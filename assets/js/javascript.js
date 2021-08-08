@@ -15,7 +15,7 @@ const mainSrchBtn = $('#main-search-btn')
 const mainSrchInput = $('#main-search-input')
 
 // Spoonacular API Key
-const spoonApiKey = "";
+const spoonApiKey = "c0b01345b7484f1b90b89bab3999317f";
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
@@ -185,8 +185,6 @@ function printHistory(){
 historyBox.on('click', function(e){
   let clickValue = e.target.textContent
   searchByIngredients(clickValue)
-
-
 })
 
 /*Rebuilder button for dev purposes (or to keep?), 
@@ -200,6 +198,7 @@ $('#rebuildCards').click( function rebuildCards () {
     console.log('No saved data');
   }
 });
+
 //Build cards when called
 function recipeCardBuild (array) {
   $('.recipeCard').remove();
@@ -221,6 +220,15 @@ function recipeCardBuild (array) {
     })
 }
 
+// Get Recipies by Id
+function getRecipeById(id) {
+  // Search Most Recent ApiCall for Id
+  // Return needed Recipe info by Id
+  // 
+}
+
+function getAllRecipes(re)
+
 // Added Button Event Listeners
 menuBtn.on('click', printDropMenu)
 mainSrchBtn && mainSrchBtn.on('click', searchAndSave);
@@ -235,4 +243,4 @@ if (window.location.pathname.endsWith('index.html')) {
 if (window.location.pathname.includes('main.html')) {
   populateMainSearch();
   searchByIngredients();
-}
+} 
