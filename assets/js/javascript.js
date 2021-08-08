@@ -219,8 +219,7 @@ class RecipeCard {
         newRecipeOl.append(newRecipeIngMiss);
       })
 
-      // Append Card to the Recipe Compare Container
-      $('.recipe-compare-card-1').append(newRecipeCard);
+      return newRecipeCard;
     };  
   }
 }
@@ -252,9 +251,25 @@ function getRecipeById(id) {
   let recipeObject = savedData.find(recipe => {
     return recipe.id == id;
   })
+  
   let newRecipeCard = new RecipeCard(recipeObject);
 
-  newRecipeCard.buildCardById()
+  return newRecipeCard.buildCardById();
+}
+
+// Compare Section Logic
+function compareSlotSelect(recipeId) {
+  let recipeCard = getRecipeById(recipeId)
+
+  // Append Card to the Recipe Compare Container
+  if ( $('.recipe-compare-card-1').children().length < 1) {
+    $('.recipe-compare-card-1').append(recipeCard);
+    
+  } else if ( $('.recipe-compare-card-2').children().length < 1){
+    $('.recipe-compare-card-2').append(recipeCard);
+  } else {
+    // Select Slot By Focus
+  }
 }
 
 // Added Button Event Listeners
@@ -262,10 +277,11 @@ menuBtn.on('click', printDropMenu)
 mainSrchBtn && mainSrchBtn.on('click', searchAndSave);
 findRecipeBtn && findRecipeBtn.on('click', goToMain);
 recipeContainer && recipeContainer.on('click', (event) => {
-  let recipeId = $(event.target).attr('data-id')
-  console.log(event.target, recipeId)
-  getRecipeById(recipeId)
+  let recipeId = $(event.target).attr('data-id');
+
+  compareSlotSelect(recipeId)
 });
+
 historyBox.on('click', function(event){
   let clickValue = event.target.textContent
   searchByIngredients(clickValue)
@@ -294,11 +310,5 @@ function rebuildCards() {
   let savedData = getStoredQuery();
   buildAllCards(savedData);
 }
-
-const recipeBtn = $('#temp-recipe-btns');
-
-recipeBtn && recipeBtn.on('click', (event) => {
-  getRecipeById(633265); // 633265 "Bacon & Egg Toast Cups"
-});
 
 // DEBUG END
