@@ -1,4 +1,10 @@
-.main-container{
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.main-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,19 +19,24 @@
     display: flex;
 }
 
-.search-history-container{
+.search-history-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 30%;
     margin:  1rem;
+}
+
+.search-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .row{
     margin: 3rem;
 }
 
-.word-cloud-center{
+.word-cloud-center {
     display: flex;
     justify-content: center;
 }
@@ -39,13 +50,13 @@
     overflow: auto;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
-  }
+}
 
-  li{
-      list-style-type: none;
-  }
+li {
+    list-style-type: none;
+}
 
-.show{
+.show {
     display: block;
 }
 
@@ -89,3 +100,71 @@
     border: 1px solid #fff;
   }
 /* word cloud CSS ends here */
+/* Tucker - Don't need to keep any styling the same, the flex box and width stuff is
+important. Some recipes have odd entries so the card width is set to be flexible 
+with what spoontacular gives us. Selectors for applying styles are important */
+.work-feature-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.work-feature-block-image {
+    max-height: 20em;
+}
+
+#rebuildCards {
+    color: white;
+    padding: .3rem;
+    font-size: 1em;
+}
+
+#contentContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#recipeContainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.recipeCard {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: max-content;
+    margin: .5rem;
+    background-color: #1779ba;
+    border-radius: .5em;
+    box-shadow: .3rem .3rem .3rem black;
+    padding: 1rem;
+    color: whitesmoke;
+}
+
+.recipeCard img {
+    border-radius: 1em;
+    box-shadow: .3rem .3rem .3rem black;
+}
+
+.recipeTitle {
+    text-decoration: underline;
+    text-align: center;
+}
+
+.recipeCard ol {
+    padding-top: 1em;
+}
+
+.usedIngredient {
+    color: greenyellow;
+}
+
+.missIngredient {
+    color: red;
+    font-style: italic;
+    text-decoration: underline;
+}
