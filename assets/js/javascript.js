@@ -204,8 +204,8 @@ class RecipeCard {
     this.usedIngredients = recipeObject.usedIngredients;
 
     this.buildCardById = function buildCardById() {
-      // Build Card Elements with data provided by the Spoonacular API
-      let newRecipeCard = $('<div class="recipeCard" name="'+this.id+'"></div>');
+      // Build Card Elements with selected data provided by the Spoonacular API
+      let newRecipeCard = $('<div class="recipeCard" name='+this.id+'></div>');
       let newRecipeTitle = $('<h3 class="recipeTitle">'+this.title+'</h3>');
       let newRecipeImage = $('<img class="recipeImage" src='+this.image+'>');
       let newRecipeOl = $('<ol class="ingredientList" name="recipe '+this.id+'"></ol>');
@@ -221,29 +221,29 @@ class RecipeCard {
 
       // Append Card to the Recipe Compare Container
       $('.recipe-compare-card-1').append(newRecipeCard);
-    };
+    };  
   }
 }
 
 //Build cards when called
 function buildAllCards (recipesArray) {
   $('.recipeCard').remove();
-    recipesArray.forEach ((element) => {
-      newRecipeCard = $('<div class="recipeCard" name='+element.id+' "></div>');
-      newRecipeTitle = $('<h3 class="recipeTitle">'+element.title+'</h3>');
-      newRecipeImage = $('<img class="recipeImage" src='+element.image+'>');
-      newRecipeOl = $('<ol class="ingredientList" name="recipe '+element.id+'"></ol>');
-      newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
-      element.usedIngredients.forEach((ele) => {
-        newRecipeIngUsed = $('<li class="usedIngredient" aisle="'+ele.aisle+'">'+ele.originalString+'</li>');
-        newRecipeOl.append(newRecipeIngUsed);
-      })
-      element.missedIngredients.forEach((ele2) => {
-        newRecipeIngMiss = $('<li class="missIngredient" aisle="'+ele2.aisle+'">'+ele2.originalString+'</li>');
-        newRecipeOl.append(newRecipeIngMiss);
-      })
-      $('#recipeContainer').append(newRecipeCard);
+  recipesArray.forEach ((element) => {
+    newRecipeCard = $('<div class="recipeCard" data-id='+element.id+'></div>');
+    newRecipeTitle = $('<h3 class="recipeTitle" data-id='+element.id+'>'+element.title+'</h3>');
+    newRecipeImage = $('<img class="recipeImage" src='+element.image+' data-id='+element.id+'>');
+    newRecipeOl = $('<ol class="ingredientList" data-id='+element.id+' "></ol>');
+    newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
+    element.usedIngredients.forEach((ele) => {
+      newRecipeIngUsed = $('<li class="usedIngredient" data-id='+element.id+' aisle="'+ele.aisle+'">'+ele.originalString+'</li>');
+      newRecipeOl.append(newRecipeIngUsed);
     })
+    element.missedIngredients.forEach((ele2) => {
+      newRecipeIngMiss = $('<li class="missIngredient" data-id='+element.id+' aisle="'+ele2.aisle+'">'+ele2.originalString+'</li>');
+      newRecipeOl.append(newRecipeIngMiss);
+    })
+    $('#recipeContainer').append(newRecipeCard);
+  })
 }
 
 // Get Recipie by Id
@@ -262,7 +262,7 @@ menuBtn.on('click', printDropMenu)
 mainSrchBtn && mainSrchBtn.on('click', searchAndSave);
 findRecipeBtn && findRecipeBtn.on('click', goToMain);
 recipeContainer && recipeContainer.on('click', (event) => {
-  let recipeId = $(event.target).attr('name')
+  let recipeId = $(event.target).attr('data-id')
   console.log(event.target, recipeId)
   getRecipeById(recipeId)
 });
