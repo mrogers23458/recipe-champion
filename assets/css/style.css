@@ -95,8 +95,9 @@ with what spoontacular gives us. Selectors for applying styles are important */
 }
 
 #recipe-compare-container {
-    flex: 1 1 100%;
+    display: flex;
     flex-flow: row nowrap;
+    justify-content: center;
 }
 
 [class^="recipe-compare-card"] {
@@ -115,10 +116,6 @@ with what spoontacular gives us. Selectors for applying styles are important */
 .recipeCard {
     display: flex;
     flex-direction: column;
-    align-content: center;
-    justify-content: flex-start;
-    align-items: center;
-    max-width: max-content;
     margin: .5rem;
     background-color: #1779ba;
     border-radius: .5em;
