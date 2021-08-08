@@ -94,6 +94,18 @@ with what spoontacular gives us. Selectors for applying styles are important */
     width: 100%;
 }
 
+#recipe-compare-container {
+    flex: 1 1 100%;
+    flex-flow: row nowrap;
+}
+
+[class^="recipe-compare-card"] {
+    flex: 0 1 50%;
+    min-height: 300px;
+    border: 2px solid black;
+    background-color: aquamarine;
+}
+
 #recipeContainer {
     display: flex;
     flex-wrap: wrap;
@@ -113,6 +125,10 @@ with what spoontacular gives us. Selectors for applying styles are important */
     box-shadow: .3rem .3rem .3rem black;
     padding: 1rem;
     color: whitesmoke;
+}
+
+.recipeCard > * {
+    word-wrap: break-word;
 }
 
 .recipeCard img {

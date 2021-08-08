@@ -16,7 +16,7 @@ const mainSrchInput = $('#main-search-input')
 const recipeContainer = $('#recipeContainer')
 
 // Spoonacular API Key
-const spoonApiKey = "";
+const spoonApiKey = "c0b01345b7484f1b90b89bab3999317f";
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
@@ -205,7 +205,7 @@ class RecipeCard {
 
     this.buildCardById = function buildCardById() {
       // Build Card Elements with data provided by the Spoonacular API
-      let newRecipeCard = $('<div class="recipeCard" name="recipe '+this.id+'"></div>');
+      let newRecipeCard = $('<div class="recipeCard" name="'+this.id+'"></div>');
       let newRecipeTitle = $('<h3 class="recipeTitle">'+this.title+'</h3>');
       let newRecipeImage = $('<img class="recipeImage" src='+this.image+'>');
       let newRecipeOl = $('<ol class="ingredientList" name="recipe '+this.id+'"></ol>');
@@ -220,7 +220,7 @@ class RecipeCard {
       })
 
       // Append Card to the Recipe Compare Container
-      $('#recipe-compare-container').append(newRecipeCard);
+      $('.recipe-compare-card-1').append(newRecipeCard);
     };
   }
 }
@@ -263,6 +263,7 @@ mainSrchBtn && mainSrchBtn.on('click', searchAndSave);
 findRecipeBtn && findRecipeBtn.on('click', goToMain);
 recipeContainer && recipeContainer.on('click', (event) => {
   let recipeId = $(event.target).attr('name')
+  console.log(event.target, recipeId)
   getRecipeById(recipeId)
 });
 historyBox.on('click', function(event){
