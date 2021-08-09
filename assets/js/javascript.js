@@ -5,7 +5,7 @@ const historyBox = $('.history-wrapper');
 
 // Global Variables
 var lastSearch = [];
-var slotHasFocus = "c0b01345b7484f1b90b89bab3999317f"
+var slotHasFocus = "";
 
 // Landing Page Elements
 const findRecipeBtn = $('#land-find-recipe-btn');
@@ -222,14 +222,14 @@ class RecipeCard {
       let newRecipeCard = $('<div>').addClass("recipeCard").attr('data-id', this.id);
       let newRecipeTitle = $('<h3>').addClass("recipeTitle").text(this.title);
       let newRecipeImage = $('<img>').addClass("recipeImage").attr('src', this.image);
-      let newRecipeOl = $('<ol>').addClass("ingredientList").attr('data-id', `recipe ${this.id}`);
+      let newRecipeOl = $('<ol>').addClass("ingredientList").attr('data-id', this.id);
       newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
       this.usedIngredients.forEach((ele) => {
-        newRecipeIngUsed = $('<li>').addClass("usedIngredient").attr('aisle', ele.aisle).text(ele.originalString);
+        newRecipeIngUsed = $('<li>').addClass("usedIngredient").attr({'data-id': this.id, 'aisle': ele.aisle}).text(ele.originalString);
         newRecipeOl.append(newRecipeIngUsed);
       })
       this.missedIngredients.forEach((ele2) => {
-        newRecipeIngMiss = $('<li>').addClass("missIngredient").attr('aisle', ele2.aisle).text(ele2.originalString);
+        newRecipeIngMiss = $('<li>').addClass("missIngredient").attr({'data-id': this.id, 'aisle': ele2.aisle}).text(ele2.originalString);
         newRecipeOl.append(newRecipeIngMiss);
       })
 
