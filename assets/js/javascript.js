@@ -8,8 +8,6 @@ const menuBtn = $('#dropBtn');
 const dropDownMenu = document.querySelector('.dropdown-content');
 const historyBox = $('.history-wrapper');
 
-
-
 // Global Variables
 var lastSearch = [];
 var slotHasFocus = "";
@@ -27,7 +25,7 @@ const slot1 = $('.recipe-compare-card-1').attr('name', 'slot1');
 const slot2 = $('.recipe-compare-card-2').attr('name', 'slot2');
 
 // Spoonacular API Key
-const spoonApiKey = "";
+const spoonApiKey = "c0b01345b7484f1b90b89bab3999317f";
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
@@ -50,7 +48,7 @@ var spoonacularUrls = {
   },
 
   // Create Request Url for find recipe by ingredients
-  findByIngredients: function (ingredients, numberOfRecipes=10, ignorePantry=true) {
+  findByIngredients: function (ingredientsArray, numberOfRecipes=10, ignorePantry=true) {
     let count = 0;
     let baseUrl = this.constructBaseUrl(this.findByIngredientsRequest)
 
@@ -101,6 +99,7 @@ function addJoke() {
 
 // Search By Ingredients
 function searchByIngredients(ingredientsArray) {
+  console.log(ingredientsArray)
   let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
 
   apiCall(baseUrl);
@@ -364,7 +363,9 @@ recipeCompareContainer && recipeCompareContainer.on('click', (event) => {
 // Search from history list
 historyBox.on('click', function(event){
   let clickValue = event.target.textContent
-  searchByIngredients(clickValue)
+  console.log(clickValue)
+  let ingredientsArray = clickValue.replace(/\s/g,'').split(',');
+  searchByIngredients(ingredientsArray);
 });
 
 // Click function for wordcloud items
