@@ -181,12 +181,12 @@ function populateWordCloud(data){
       myTags.push(recipesArray)
   }
   
-  // rends the word cloud to div with class content, with tags pushed from iteration
+  // renders the word cloud to div with class content, with tags pushed from iteration
   TagCloud('.content', myTags,{
     // word cloud rendering options
     
     // radius in px
-    radius: 300,
+    radius: 400,
 
     // animation speed
     // slow, normal, fast
@@ -277,9 +277,14 @@ findRecipeBtn && findRecipeBtn.on('click', goToMain)
 // added wordcloud event listener
 
 console.log(wordcloudDivEl)
+
+//click function for wordcloud items
 wordcloudDivEl.on('click', function(e){
   console.log(e.target)
   console.log(e.target.textContent)
+
+  let clickValue = e.target.textContent
+  console.log(clickValue)
 })
 // Add JOTD to landing page
 if (window.location.pathname.endsWith('index.html')) {
