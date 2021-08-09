@@ -144,7 +144,7 @@ function apiCall(baseUrl, params = {}) {
   return fetch(requestUrl).then( function(response) {
     if (!response.status == 200) {
       // TODO: 404 Redirect
-      alert('Spoonacular responded with status 200');
+      alert(`Spoonacular responded with ${response.status}`);
     }
     return response.json();
   
