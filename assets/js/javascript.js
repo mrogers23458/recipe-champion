@@ -264,9 +264,7 @@ class RecipeCard {
       let newRecipeOl = $('<ol>').addClass("ingredientList").attr('data-id', this.id);
       newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
 
-      console.log(this.usedIngredients)
       this.usedIngredients.forEach((ele) => {
-        console.log(ele)
         let newRecipeIngUsed = $('<li>').addClass("usedIngredient").attr({'data-id': this.id, 'aisle': ele.aisle}).text(ele.originalString);
         newRecipeOl.append(newRecipeIngUsed);
       })
