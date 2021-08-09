@@ -99,7 +99,6 @@ function addJoke() {
 
 // Search By Ingredients
 function searchByIngredients(ingredientsArray) {
-  console.log(ingredientsArray)
   let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
 
   apiCall(baseUrl);
@@ -363,7 +362,6 @@ recipeCompareContainer && recipeCompareContainer.on('click', (event) => {
 // Search from history list
 historyBox.on('click', function(event){
   let clickValue = event.target.textContent
-  console.log(clickValue)
   let ingredientsArray = clickValue.replace(/\s/g,'').split(',');
   searchByIngredients(ingredientsArray);
 });
