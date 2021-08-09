@@ -1,7 +1,15 @@
+//word cloud global variables
+const myTags = [];
+const wordcloudDivEl = $('#wordCloudHolderEl')
+console.log(wordcloudDivEl)
+var test = document.querySelector('.content')
+
 // Global Page Elements
 const menuBtn = $('#dropBtn');
 const dropDownMenu = document.querySelector('.dropdown-content');
 const historyBox = $('.history-wrapper');
+
+
 
 // Global Variables
 var lastSearch = [];
@@ -152,6 +160,9 @@ function apiCall(baseUrl, params = {}) {
     // TODO: Do something neat with data
     // OR pass data to new function to handle various API requests
     processSpoonacularData(data);
+    //function call to populate word cloud with fetched Data
+    populateWordCloud(data)
+    
     return data;
   }).catch((error) => {
     console.log(error);
@@ -162,6 +173,41 @@ function processSpoonacularData(data) {
   // TODO: Expand to handle various API calls
   localStorage.setItem('queryArray', JSON.stringify(data));
   //return data; //<--don't think this is necessary, unless the call needs it for something
+}
+
+// actual function to populate wordcloud
+function populateWordCloud(data){
+  //iteration for 10 recipes
+  const myTags = []
+  test.innerHTML = ''
+
+  for(i=0; i < 10; i++){
+    var recipesArray = data[i].title
+      myTags.push(recipesArray)
+  }
+  
+  // renders the word cloud to div with class content, with tags pushed from iteration
+  TagCloud('.content', myTags,{
+    // word cloud rendering options
+    
+    // radius in px
+    radius: 400,
+
+    // animation speed
+    // slow, normal, fast
+    maxSpeed: 'normal',
+    initSpeed: 'normal',
+
+    // 0 = top
+    // 90 = left
+    // 135 = right-bottom
+    direction: 135,
+    
+    // interact with cursor move on mouse out
+    keep: true
+    
+});
+
 }
 
 function printDropMenu(){
@@ -322,6 +368,18 @@ historyBox.on('click', function(event){
   let clickValue = event.target.textContent
   searchByIngredients(clickValue)
 });
+
+// Added wordcloud event listener
+console.log(wordcloudDivEl)
+
+// Click function for wordcloud items
+wordcloudDivEl.on('click', function(e){
+  console.log(e.target)
+  console.log(e.target.textContent)
+  
+  let clickValue = e.target.textContent
+  console.log(clickValue)
+})
 
 // Add JOTD to landing page, check if 24hours has passed since last call
 if (window.location.pathname.endsWith('index.html')) {
