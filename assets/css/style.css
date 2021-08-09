@@ -23,7 +23,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 30%;
     margin:  1rem;
 }
 
@@ -95,6 +94,19 @@ with what spoontacular gives us. Selectors for applying styles are important */
     width: 60%;
 }
 
+#recipe-compare-container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+}
+
+[class^="recipe-compare-card"] {
+    flex: 0 1 50%;
+    min-height: 500px;
+    /* Temp Border */
+    border: 2px solid black; 
+}
+
 #recipeContainer {
     display: flex;
     flex-wrap: wrap;
@@ -104,16 +116,16 @@ with what spoontacular gives us. Selectors for applying styles are important */
 .recipeCard {
     display: flex;
     flex-direction: column;
-    align-content: center;
-    justify-content: flex-start;
-    align-items: center;
-    max-width: max-content;
     margin: .5rem;
     background-color: #1779ba;
     border-radius: .5em;
     box-shadow: .3rem .3rem .3rem black;
     padding: 1rem;
     color: whitesmoke;
+}
+
+.recipeCard > * {
+    word-wrap: break-word;
 }
 
 .recipeCard img {
