@@ -91,7 +91,7 @@ with what spoontacular gives us. Selectors for applying styles are important */
 #contentContainer {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 60%;
 }
 
 #recipe-compare-container {

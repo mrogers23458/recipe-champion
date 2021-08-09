@@ -5,7 +5,7 @@ const historyBox = $('.history-wrapper');
 
 // Global Variables
 var lastSearch = [];
-var slotHasFocus = ""
+var slotHasFocus = "c0b01345b7484f1b90b89bab3999317f"
 
 // Landing Page Elements
 const findRecipeBtn = $('#land-find-recipe-btn');
@@ -74,14 +74,22 @@ var spoonacularUrls = {
 function addJoke() {
   const jokeEl = $('<p>').addClass('joke h3 text-center');
   const jokeRequest = spoonacularUrls.jokeRequest;
-  const jokeRequestUrl = spoonacularUrls.constructBaseUrl(jokeRequest) ;
-
-  apiCall(jokeRequestUrl).then((data) => {
-    var jokeObject = data;
-    jokeEl.text(jokeObject.text)
-  });
-
-  jokeEl.insertBefore(leadEl)
+  const jokeRequestUrl = spoonacularUrls.constructBaseUrl(jokeRequest);
+  //Check if there is already a joke stored, if not do a call, otherwise use stored
+  if (localStorage.getItem('todaysJoke') == null) {
+    apiCall(jokeRequestUrl).then((data) => {
+      jokeObject = data;
+      console.log(jokeObject);
+      jokeEl.text(jokeObject.text);
+      localStorage.setItem('todaysJoke', jokeObject.text);
+      jokeEl.insertBefore(leadEl);
+    });
+  } else {
+    jokeObject = localStorage.getItem('todaysJoke');
+    jokeEl.text(jokeObject);
+    console.log(jokeObject);
+    jokeEl.insertBefore(leadEl);
+  }
 }
 
 // Search By Ingredients
@@ -123,7 +131,7 @@ function populateMainSearch() {
 // Create full request url w/optional additional parameters for a Spoonacular API call
 function apiCall(baseUrl, params = {}) {
   let paramsString = ""
-
+  console.log('Calling spoonacular: ', baseUrl)
   // Add additional params if provided
   if (params != null) {
     for (let [key, value] of Object.entries(params)) {
@@ -136,12 +144,14 @@ function apiCall(baseUrl, params = {}) {
   return fetch(requestUrl).then( function(response) {
     if (!response.status == 200) {
       // TODO: 404 Redirect
+      alert(`Spoonacular responded with ${response.status}`);
     }
     return response.json();
   
   }).then( function(data) {
     // TODO: Do something neat with data
     // OR pass data to new function to handle various API requests
+    console.log(data);
     processSpoonacularData(data);
     return data;
   }).catch((error) => {
@@ -154,7 +164,7 @@ function processSpoonacularData(data) {
   localStorage.setItem('queryArray', JSON.stringify(data));
   buildAllCards(data);
   console.log(data)
-  return data;
+  //return data; //<--don't think this is necessary, unless the call needs it for something
 }
 
 function printDropMenu(){
@@ -188,7 +198,7 @@ function getStoredQuery() {
   if ( localStorage.getItem('queryArray') != null) {
     var savedData = JSON.parse(localStorage.getItem('queryArray'));
   } else {
-    console.log('No saved data');
+    console.log('No saved search data');
   }
   return savedData;
 }
@@ -209,17 +219,17 @@ class RecipeCard {
 
     this.buildCardById = function buildCardById() {
       // Build Card Elements with selected data provided by the Spoonacular API
-      let newRecipeCard = $('<div class="recipeCard" name='+this.id+'></div>');
-      let newRecipeTitle = $('<h3 class="recipeTitle">'+this.title+'</h3>');
-      let newRecipeImage = $('<img class="recipeImage" src='+this.image+'>');
-      let newRecipeOl = $('<ol class="ingredientList" name="recipe '+this.id+'"></ol>');
+      let newRecipeCard = $('<div>').addClass("recipeCard").attr('data-id', this.id);
+      let newRecipeTitle = $('<h3>').addClass("recipeTitle").text(this.title);
+      let newRecipeImage = $('<img>').addClass("recipeImage").attr('src', this.image);
+      let newRecipeOl = $('<ol>').addClass("ingredientList").attr('data-id', `recipe ${this.id}`);
       newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
       this.usedIngredients.forEach((ele) => {
-        newRecipeIngUsed = $('<li class="usedIngredient" aisle="'+ele.aisle+'">'+ele.originalString+'</li>');
+        newRecipeIngUsed = $('<li>').addClass("usedIngredient").attr('aisle', ele.aisle).text(ele.originalString);
         newRecipeOl.append(newRecipeIngUsed);
       })
       this.missedIngredients.forEach((ele2) => {
-        newRecipeIngMiss = $('<li class="missIngredient" aisle="'+ele2.aisle+'">'+ele2.originalString+'</li>');
+        newRecipeIngMiss = $('<li>').addClass("missIngredient").attr('aisle', ele2.aisle).text(ele2.originalString);
         newRecipeOl.append(newRecipeIngMiss);
       })
 
@@ -316,9 +326,19 @@ historyBox.on('click', function(event){
   searchByIngredients(clickValue)
 });
 
-// Add JOTD to landing page
+// Add JOTD to landing page, check if 24hours has passed since last call
 if (window.location.pathname.endsWith('index.html')) {
-  addJoke();
+  if (localStorage.getItem('day1') == null) { 
+    localStorage.setItem('day1', Date.now());
+    addJoke();
+  } else {
+    day1 = localStorage.getItem('day1');
+    day2 = Date.now();
+    if ( (day2-day1) >= 86400 ) { //24 hours = 86400 seconds
+      addJoke();
+    }
+    localStorage.setItem('day1', day2);
+  }
 }
 
 // Functions on switch to Main Page
