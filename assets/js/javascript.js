@@ -20,7 +20,7 @@ const slot1 = $('.recipe-compare-card-1').attr('name', 'slot1');
 const slot2 = $('.recipe-compare-card-2').attr('name', 'slot2');
 
 // Spoonacular API Key
-const spoonApiKey = "";
+const spoonApiKey = "c0b01345b7484f1b90b89bab3999317f";
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
@@ -151,7 +151,6 @@ function apiCall(baseUrl, params = {}) {
   }).then( function(data) {
     // TODO: Do something neat with data
     // OR pass data to new function to handle various API requests
-    console.log(data);
     processSpoonacularData(data);
     return data;
   }).catch((error) => {
@@ -162,8 +161,6 @@ function apiCall(baseUrl, params = {}) {
 function processSpoonacularData(data) {
   // TODO: Expand to handle various API calls
   localStorage.setItem('queryArray', JSON.stringify(data));
-  buildAllCards(data);
-  console.log(data)
   //return data; //<--don't think this is necessary, unless the call needs it for something
 }
 
