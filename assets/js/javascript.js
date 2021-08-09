@@ -239,7 +239,7 @@ if (window.location.pathname.endsWith('index.html')) {
   if (localStorage.getItem('day1') == null) { 
     localStorage.setItem('day1', Date.now());
     addJoke();
-  } else if (localStorage.getItem('day1') != null) {
+  } else {
     day1 = localStorage.getItem('day1');
     day2 = Date.now();
     if ( (day2-day1) >= 86400 ) { //24 hours = 86400 seconds
