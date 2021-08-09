@@ -30,7 +30,6 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    width: 100%;
 }
 
 .row{
@@ -70,6 +69,37 @@ li {
     text-align: center;
 }
 
+/* This is all wordcloud CSS */
+.tagcloud {
+    font-size: 16px;
+  }
+  
+  .tagcloud--item {
+    padding: 2px 4px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  
+  .tagcloud--item:hover {
+    background-color: rgba(0,0,0,.1);
+    border: 1px solid #333;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    opacity: 1 !important;
+    z-index: 100 !important;
+  }
+  
+  .light .tagcloud--item {
+    color: #fff;
+  }
+  
+  .light .tagcloud--item:hover {
+    background-color: rgba(255,255,255,.1);
+    border: 1px solid #fff;
+  }
+/* word cloud CSS ends here */
 /* Tucker - Don't need to keep any styling the same, the flex box and width stuff is
 important. Some recipes have odd entries so the card width is set to be flexible 
 with what spoontacular gives us. Selectors for applying styles are important */
