@@ -1,7 +1,6 @@
 //word cloud global variables
 const myTags = [];
 const wordcloudDivEl = $('#wordCloudHolderEl')
-console.log(wordcloudDivEl)
 var test = document.querySelector('.content')
 
 // Global Page Elements
@@ -28,7 +27,7 @@ const slot1 = $('.recipe-compare-card-1').attr('name', 'slot1');
 const slot2 = $('.recipe-compare-card-2').attr('name', 'slot2');
 
 // Spoonacular API Key
-const spoonApiKey = "c0b01345b7484f1b90b89bab3999317f";
+const spoonApiKey = "";
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
@@ -205,7 +204,6 @@ function populateWordCloud(data){
     
     // interact with cursor move on mouse out
     keep: true
-    
 });
 
 }
@@ -369,16 +367,9 @@ historyBox.on('click', function(event){
   searchByIngredients(clickValue)
 });
 
-// Added wordcloud event listener
-console.log(wordcloudDivEl)
-
 // Click function for wordcloud items
 wordcloudDivEl.on('click', function(e){
-  console.log(e.target)
-  console.log(e.target.textContent)
-  
   let clickValue = e.target.textContent
-  console.log(clickValue)
 })
 
 // Add JOTD to landing page, check if 24hours has passed since last call
