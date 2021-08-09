@@ -5,6 +5,7 @@ const historyBox = $('.history-wrapper');
 
 // Global Variables
 var lastSearch = [];
+var slotHasFocus = ""
 
 // Landing Page Elements
 const findRecipeBtn = $('#land-find-recipe-btn');
@@ -15,8 +16,8 @@ const mainSrchBtn = $('#main-search-btn');
 const mainSrchInput = $('#main-search-input');
 const recipeContainer = $('#recipeContainer');
 const recipeCompareContainer = $('#recipe-compare-container');
-const slot1 = $('.recipe-compare-card-1');
-const slot2 = $('.recipe-compare-card-2');
+const slot1 = $('.recipe-compare-card-1').attr('name', 'slot1');
+const slot2 = $('.recipe-compare-card-2').attr('name', 'slot2');
 
 // Spoonacular API Key
 const spoonApiKey = "";
@@ -264,21 +265,20 @@ function getRecipeById(id) {
 function compareSlotSelect(recipeId) {
   let recipeCard = getRecipeById(recipeId);
 
-
   // Append Card to the Recipe Compare Container
-  if ( slot1.children().length < 1) {
-    slot1.addClass('focus').append(recipeCard);
+  if (slot1.children().length < 1) {
+    slot1.append(recipeCard);
     
-  } else if ( slot2.children().length < 1){
-    slot2.addClass('focus').append(recipeCard);
+  } else if (slot2.children().length < 1){
+    slot2.append(recipeCard);
 
   } else {
     // Select Slot By Last Focus
-    if (lastFocusedSlot === 1) {
+    if (slotHasFocus === "slot1") {
       slot1.children().remove();
       slot1.append(recipeCard);
 
-    } else if (lastFocusedSlot === 2) {
+    } else if (slotHasFocus === "slot2") {
       slot2.children().remove();
       slot2.append(recipeCard);
 
@@ -293,24 +293,24 @@ menuBtn.on('click', printDropMenu)
 mainSrchBtn && mainSrchBtn.on('click', searchAndSave);
 findRecipeBtn && findRecipeBtn.on('click', goToMain);
 
-recipeCompareContainer && recipeCompareContainer.on('click', (event) => {
-  console.log(slot1.has($(event.target)))
-  console.log(slot2.has($(event.target)))
-  if (slot1.has($(event.target))) {
-    slot2.removeClass('focus');
-    slot1.addClass('focus');
-  } else if (slot2.has($(event.target))) {
-    slot1.removeClass('focus');
-    slot2.addClass('focus');
-  }
-})
-
+// TODO: Update this to word cloud button event once available
 recipeContainer && recipeContainer.on('click', (event) => {
   let recipeId = $(event.target).attr('data-id');
 
   compareSlotSelect(recipeId)
 });
 
+// To give last used Recipe Container focus so we know which recipe should be switched out
+recipeCompareContainer && recipeCompareContainer.on('click', (event) => {
+  // Check if the clicked target is a slot 1 or 2 item
+  if ($('.recipe-compare-card-1').has($(event.target)).length === 1) {
+    slotHasFocus = "slot1";
+  } else if ($('.recipe-compare-card-2').has($(event.target)).length === 1) {
+    slotHasFocus = "slot2";
+  }
+})
+
+// Search from history list
 historyBox.on('click', function(event){
   let clickValue = event.target.textContent
   searchByIngredients(clickValue)
