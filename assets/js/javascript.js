@@ -53,7 +53,7 @@ var spoonacularUrls = {
     let baseUrl = this.constructBaseUrl(this.findByIngredientsRequest)
 
     // Add parameters for findByIngredient
-    ingredients.forEach(item => {
+    ingredientsArray.forEach(item => {
 
       if (count == 0) {
         baseUrl += `&ingredients=${item}`;
@@ -184,7 +184,7 @@ function populateWordCloud(data){
   }
   
   // renders the word cloud to div with class content, with tags pushed from iteration
-  TagCloud('.content', myTags,{
+  TagCloud('.content', myTags, {
     // word cloud rendering options
     
     // radius in px
@@ -256,19 +256,23 @@ class RecipeCard {
     this.usedIngredientCount = recipeObject.usedIngredientCount;
     this.usedIngredients = recipeObject.usedIngredients;
 
-    this.buildCardById = function buildCardById() {
+    this.buildCard = function buildCard() {
       // Build Card Elements with selected data provided by the Spoonacular API
       let newRecipeCard = $('<div>').addClass("recipeCard").attr('data-id', this.id);
       let newRecipeTitle = $('<h3>').addClass("recipeTitle").text(this.title);
       let newRecipeImage = $('<img>').addClass("recipeImage").attr('src', this.image);
       let newRecipeOl = $('<ol>').addClass("ingredientList").attr('data-id', this.id);
       newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
+
+      console.log(this.usedIngredients)
       this.usedIngredients.forEach((ele) => {
-        newRecipeIngUsed = $('<li>').addClass("usedIngredient").attr({'data-id': this.id, 'aisle': ele.aisle}).text(ele.originalString);
+        console.log(ele)
+        let newRecipeIngUsed = $('<li>').addClass("usedIngredient").attr({'data-id': this.id, 'aisle': ele.aisle}).text(ele.originalString);
         newRecipeOl.append(newRecipeIngUsed);
       })
+
       this.missedIngredients.forEach((ele2) => {
-        newRecipeIngMiss = $('<li>').addClass("missIngredient").attr({'data-id': this.id, 'aisle': ele2.aisle}).text(ele2.originalString);
+        let newRecipeIngMiss = $('<li>').addClass("missIngredient").attr({'data-id': this.id, 'aisle': ele2.aisle}).text(ele2.originalString);
         newRecipeOl.append(newRecipeIngMiss);
       })
 
@@ -287,15 +291,26 @@ function buildAllCards (recipesArray) {
     newRecipeOl = $('<ol class="ingredientList" data-id='+element.id+' "></ol>');
     newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
     element.usedIngredients.forEach((ele) => {
-      newRecipeIngUsed = $('<li class="usedIngredient" data-id='+element.id+' aisle="'+ele.aisle+'">'+ele.originalString+'</li>');
+      let newRecipeIngUsed = $('<li class="usedIngredient" data-id='+element.id+' aisle="'+ele.aisle+'">'+ele.originalString+'</li>');
       newRecipeOl.append(newRecipeIngUsed);
     })
     element.missedIngredients.forEach((ele2) => {
-      newRecipeIngMiss = $('<li class="missIngredient" data-id='+element.id+' aisle="'+ele2.aisle+'">'+ele2.originalString+'</li>');
+      let newRecipeIngMiss = $('<li class="missIngredient" data-id='+element.id+' aisle="'+ele2.aisle+'">'+ele2.originalString+'</li>');
       newRecipeOl.append(newRecipeIngMiss);
     })
     $('#recipeContainer').append(newRecipeCard);
   })
+}
+
+function getRecipeId(recipeTitle) {
+  let savedData = getStoredQuery();
+  let recipe = savedData.find(recipe => {
+    return recipe.title == recipeTitle;
+  })
+
+  let recipeId = recipe.id;
+
+  return recipeId;
 }
 
 // Get Recipie by Id
@@ -303,11 +318,11 @@ function getRecipeById(id) {
   let savedData = getStoredQuery();
   let recipeObject = savedData.find(recipe => {
     return recipe.id == id;
-  })
+  });
   
   let newRecipeCard = new RecipeCard(recipeObject);
 
-  return newRecipeCard.buildCardById();
+  return newRecipeCard.buildCard();
 }
 
 // Compare Section Logic
@@ -368,7 +383,9 @@ historyBox.on('click', function(event){
 
 // Click function for wordcloud items
 wordcloudDivEl.on('click', function(e){
-  let clickValue = e.target.textContent
+  let recipeTitle = e.target.textContent;
+  let recipeId = getRecipeId(recipeTitle);
+  compareSlotSelect(recipeId);
 })
 
 // Add JOTD to landing page, check if 24hours has passed since last call
