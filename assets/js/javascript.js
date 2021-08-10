@@ -106,7 +106,7 @@ function searchByIngredients(ingredientsArray) {
 
 // Save last search from Landing Page in localStorage
 function saveSearchInput(searchInput) {
-  let ingredientSearchArray = searchInput.replace(/\s/g,'').split(',')
+  let ingredientSearchArray = searchInput.trim().split(',')
     
   try {
     localStorage.setItem('lastSearch', JSON.stringify(ingredientSearchArray));
@@ -118,7 +118,7 @@ function saveSearchInput(searchInput) {
 // Redirect to Main Page with 
 function redirectUrlWithParameters(searchInput) {
   let mainUrl = "./assets/main.html";
-  let params = `?ingredients=${searchInput.replace(/\s/g,'')}`;
+  let params = `?ingredients=${searchInput.trim()}`;
   let targetUrl = mainUrl + params;
 
   window.location.href = targetUrl;
@@ -154,11 +154,7 @@ function apiCall(baseUrl, params = {}) {
     return response.json();
   
   }).then( function(data) {
-    // TODO: Do something neat with data
-    // OR pass data to new function to handle various API requests
     processSpoonacularData(data);
-    //function call to populate word cloud with fetched Data
-    populateWordCloud(data)
     
     return data;
   }).catch((error) => {
@@ -167,9 +163,10 @@ function apiCall(baseUrl, params = {}) {
 }
 
 function processSpoonacularData(data) {
-  // TODO: Expand to handle various API calls
+  // Store latest API data query
   localStorage.setItem('queryArray', JSON.stringify(data));
-  //return data; //<--don't think this is necessary, unless the call needs it for something
+  //function call to populate word cloud with fetched Data
+  populateWordCloud(data)
 }
 
 // actual function to populate wordcloud
@@ -219,18 +216,19 @@ function goToMain() {
 
 // function to do a search by ingredients, and append the search terms to the history box
 function searchAndSave(){
-  let ingredientsArray = mainSrchInput.val().replace(/\s/g,'').split(',');
+  let ingredientsArray = mainSrchInput.val().trim().split(',');
   searchByIngredients(ingredientsArray)
   printHistory(ingredientsArray)
 }
 
 //function to append search results
 function printHistory(ingredientsArray) {
-    //appends searches to search history box
-    historyBox.append(`<div id='history-card'><p>${ingredientsArray}</p></div>`)
-    
-    //sets local storage to the most recent search
-    localStorage.setItem('srchHistory', ingredientsArray)
+  console.log(ingredientsArray)
+  //appends searches to search history box
+  historyBox.append(`<div id='history-card'><p>${ingredientsArray}</p></div>`)
+  
+  //sets local storage to the most recent search
+  localStorage.setItem('srchHistory', ingredientsArray)
 }
 
 // Get Most recent search query data
@@ -376,7 +374,7 @@ recipeCompareContainer && recipeCompareContainer.on('click', (event) => {
 // Search from history list
 historyBox.on('click', function(event){
   let clickValue = event.target.textContent
-  let ingredientsArray = clickValue.replace(/\s/g,'').split(',');
+  let ingredientsArray = clickValue.trim().split(',');
   searchByIngredients(ingredientsArray);
 });
 
