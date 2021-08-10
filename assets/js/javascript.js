@@ -275,27 +275,6 @@ class RecipeCard {
   }
 }
 
-//Build cards when called
-function buildAllCards (recipesArray) {
-  $('.recipeCard').remove();
-  recipesArray.forEach ((element) => {
-    newRecipeCard = $('<div class="recipeCard" data-id='+element.id+'></div>');
-    newRecipeTitle = $('<h3 class="recipeTitle" data-id='+element.id+'>'+element.title+'</h3>');
-    newRecipeImage = $('<img class="recipeImage" src='+element.image+' data-id='+element.id+'>');
-    newRecipeOl = $('<ol class="ingredientList" data-id='+element.id+' "></ol>');
-    newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
-    element.usedIngredients.forEach((ele) => {
-      let newRecipeIngUsed = $('<li class="usedIngredient" data-id='+element.id+' aisle="'+ele.aisle+'">'+ele.originalString+'</li>');
-      newRecipeOl.append(newRecipeIngUsed);
-    })
-    element.missedIngredients.forEach((ele2) => {
-      let newRecipeIngMiss = $('<li class="missIngredient" data-id='+element.id+' aisle="'+ele2.aisle+'">'+ele2.originalString+'</li>');
-      newRecipeOl.append(newRecipeIngMiss);
-    })
-    $('#recipeContainer').append(newRecipeCard);
-  })
-}
-
 // Recipe Id from Title
 function getRecipeId(recipeTitle) {
   let savedData = getStoredQuery();
@@ -360,6 +339,7 @@ wordcloudDivEl.on('click', function(e){
   let recipeId = getRecipeId(recipeTitle);
   compareSlotSelect(recipeId);
 })
+
 // To give last used Recipe Container focus so we know which recipe should be switched out
 recipeCompareContainer && recipeCompareContainer.on('click', (event) => {
   // Check if the clicked target is a slot 1 or 2 item
@@ -376,7 +356,6 @@ historyBox.on('click', function(event){
   let ingredientsArray = clickValue.trim().split(',');
   searchByIngredients(ingredientsArray);
 });
-
 
 // Add JOTD to landing page, check if 24hours has passed since last call
 if (window.location.pathname.endsWith('index.html')) {
@@ -398,18 +377,3 @@ if (window.location.pathname.includes('main.html')) {
   let ingredientsList = populateMainSearch();
   searchByIngredients(ingredientsList);
 } 
-
-// DEBUG Tools:
-//
-//
-/*Rebuilder button for dev purposes (or to keep?), 
-will use a localy store search result array to build cards 
-again without a new query*/
-$('#rebuildCards').on('click', rebuildCards);
-
-function rebuildCards() {
-  let savedData = getStoredQuery();
-  buildAllCards(savedData);
-}
-
-// DEBUG END
