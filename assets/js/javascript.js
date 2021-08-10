@@ -129,9 +129,7 @@ function processSpoonacularData(data) {
   // Store latest API data query
   localStorage.setItem('queryArray', JSON.stringify(data));
   //function call to populate word cloud with fetched Data
-  if (window.location.pathname.includes('main.html') && !mainSrchInput.val() == "") {
-    populateWordCloud(data)
-  }
+  populateWordCloud(data)
 }
 
 // actual function to populate wordcloud
@@ -169,6 +167,7 @@ function populateWordCloud(data){
 
 // Search By Ingredients
 function searchByIngredients(ingredientsArray) {
+  user.lastRecipeSearched = mainSrchInput.val();
   let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
 
   apiCall(baseUrl);
@@ -207,7 +206,6 @@ function goToMain() {
 
 // function to do a search by ingredients, and append the search terms to the history box
 function searchAndSave(){
-  user.lastRecipeSearched = mainSrchInput.val();
   console.log(user)
   
   if (!user.searchedRecipes.includes(mainSrchInput.val())) {
@@ -228,7 +226,7 @@ function searchAndSave(){
 //function to append search results
 function createHistoryButton(ingredientsArray) {
   //appends searches to search history box
-  historyBox.append(`<div id='history-card'><p>${ingredientsArray}</p></div>`)
+  historyBox.prepend(`<div id='history-card'><p>${ingredientsArray}</p></div>`)
 }
 
 // Get Most recent search query data
@@ -448,5 +446,6 @@ if (window.location.pathname.includes('main.html')) {
 
   let ingredientsList = populateMainSearch();
   let ingredientsArray = ingredientsList.trim().split(',');
+  
   searchByIngredients(ingredientsArray);
 }
