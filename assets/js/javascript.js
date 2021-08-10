@@ -226,9 +226,6 @@ function printHistory(ingredientsArray) {
   console.log(ingredientsArray)
   //appends searches to search history box
   historyBox.append(`<div id='history-card'><p>${ingredientsArray}</p></div>`)
-  
-  //sets local storage to the most recent search
-  localStorage.setItem('srchHistory', ingredientsArray)
 }
 
 // Get Most recent search query data
@@ -330,9 +327,11 @@ function compareSlotSelect(recipeId) {
   // Append Card to the Recipe Compare Container
   if (slot1.children().length < 1) {
     slot1.append(recipeCard);
+    slotHasFocus = 'slot1';
     
   } else if (slot2.children().length < 1){
     slot2.append(recipeCard);
+    slotHasFocus = 'slot2';
 
   } else {
     // Select Slot By Last Focus
