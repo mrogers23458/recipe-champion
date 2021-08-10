@@ -8,10 +8,7 @@ const menuBtn = $('#dropBtn');
 const dropDownMenu = document.querySelector('.dropdown-content');
 const historyBox = $('.history-wrapper');
 
-
-
 // Global Variables
-var lastSearch = [];
 var slotHasFocus = "";
 
 // Landing Page Elements
@@ -50,12 +47,12 @@ var spoonacularUrls = {
   },
 
   // Create Request Url for find recipe by ingredients
-  findByIngredients: function (ingredients, numberOfRecipes=10, ignorePantry=true) {
+  findByIngredients: function (ingredientsArray, numberOfRecipes=10, ignorePantry=true) {
     let count = 0;
     let baseUrl = this.constructBaseUrl(this.findByIngredientsRequest)
 
     // Add parameters for findByIngredient
-    ingredients.forEach(item => {
+    ingredientsArray.forEach(item => {
 
       if (count == 0) {
         baseUrl += `&ingredients=${item}`;
@@ -99,42 +96,6 @@ function addJoke() {
   }
 }
 
-// Search By Ingredients
-function searchByIngredients(ingredientsArray) {
-  let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
-
-  apiCall(baseUrl);
-}
-
-// Save last search from Landing Page in localStorage
-function saveSearchInput(searchInput) {
-  let ingredientSearchArray = searchInput.replace(/\s/g,'').split(',')
-    
-  try {
-    localStorage.setItem('lastSearch', JSON.stringify(ingredientSearchArray));
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-// Redirect to Main Page with 
-function redirectUrlWithParameters(searchInput) {
-  let mainUrl = "./assets/main.html";
-  let params = `?ingredients=${searchInput.replace(/\s/g,'')}`;
-  let targetUrl = mainUrl + params;
-
-  window.location.href = targetUrl;
-  
-  return targetUrl;
-}
-
-// Poplulate Main Search input with localstorage
-function populateMainSearch() {
-  let lastSearch = JSON.parse(localStorage.getItem('lastSearch'))
-  $('#main-search-input').val(lastSearch.join(', '))
-  return lastSearch;
-}
-
 // Create full request url w/optional additional parameters for a Spoonacular API call
 function apiCall(baseUrl, params = {}) {
   let paramsString = ""
@@ -145,22 +106,18 @@ function apiCall(baseUrl, params = {}) {
       paramsString += `&${key}=${value}`;
     }
   };
-
+  
   let requestUrl = baseUrl + paramsString;
-
+  
   return fetch(requestUrl).then( function(response) {
     if (!response.status == 200) {
       // TODO: 404 Redirect
       alert(`Spoonacular responded with ${response.status}`);
     }
     return response.json();
-  
+    
   }).then( function(data) {
-    // TODO: Do something neat with data
-    // OR pass data to new function to handle various API requests
     processSpoonacularData(data);
-    //function call to populate word cloud with fetched Data
-    populateWordCloud(data)
     
     return data;
   }).catch((error) => {
@@ -169,9 +126,10 @@ function apiCall(baseUrl, params = {}) {
 }
 
 function processSpoonacularData(data) {
-  // TODO: Expand to handle various API calls
+  // Store latest API data query
   localStorage.setItem('queryArray', JSON.stringify(data));
-  //return data; //<--don't think this is necessary, unless the call needs it for something
+  //function call to populate word cloud with fetched Data
+  populateWordCloud(data)
 }
 
 // actual function to populate wordcloud
@@ -179,24 +137,24 @@ function populateWordCloud(data){
   //iteration for 10 recipes
   const myTags = []
   test.innerHTML = ''
-
+  
   for(i=0; i < 10; i++){
     var recipesArray = data[i].title
-      myTags.push(recipesArray)
+    myTags.push(recipesArray)
   }
   
   // renders the word cloud to div with class content, with tags pushed from iteration
-  TagCloud('.content', myTags,{
+  TagCloud('.content', myTags, {
     // word cloud rendering options
     
     // radius in px
-    radius: 400,
-
+    radius: 200,
+    
     // animation speed
     // slow, normal, fast
     maxSpeed: 'normal',
     initSpeed: 'normal',
-
+    
     // 0 = top
     // 90 = left
     // 135 = right-bottom
@@ -204,8 +162,31 @@ function populateWordCloud(data){
     
     // interact with cursor move on mouse out
     keep: true
-});
+  });
+}
 
+// Search By Ingredients
+function searchByIngredients(ingredientsArray) {
+  user.lastRecipeSearched = mainSrchInput.val();
+  let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
+
+  apiCall(baseUrl);
+}
+
+// Redirect to Main Page with 
+function redirectMainUrl() {
+  let targetUrl = "./assets/main.html";
+
+  window.location.href = targetUrl;
+  
+  return targetUrl;
+}
+
+// Populate Main Search input with localstorage
+function populateMainSearch() {
+  let lastSearch = user.lastRecipeSearched;
+  mainSrchInput.val(lastSearch);
+  return lastSearch;
 }
 
 function printDropMenu(){
@@ -215,26 +196,40 @@ function printDropMenu(){
 //function to redirect to main page
 function goToMain() {
   let inputValue = $('#land-input').val()
-  saveSearchInput(inputValue);
-  redirectUrlWithParameters(inputValue);
+
+  user.lastRecipeSearched = inputValue;
+  user.addSearchedIngredients(inputValue);
+  save(user)
+
+  redirectMainUrl();
 }
 
 // function to do a search by ingredients, and append the search terms to the history box
 function searchAndSave(){
-  let ingredientsArray = mainSrchInput.val().replace(/\s/g,'').split(',');
-  searchByIngredients(ingredientsArray)
-  printHistory(ingredientsArray)
+  console.log(user)
+  
+  if (!user.searchedRecipes.includes(mainSrchInput.val())) {
+    user.searchedRecipes.push(mainSrchInput.val());
+    console.log("user", user.searchedRecipes)
+    
+    let ingredientsArray = mainSrchInput.val().trim().split(',');
+    createHistoryButton(ingredientsArray);
+    searchByIngredients(ingredientsArray);
+    save(user);
+    
+  } else {
+    return;
+  }
+  mainSrchInput.val('');
 }
 
 //function to append search results
-function printHistory(ingredientsArray) {
-    //appends searches to search history box
-    historyBox.append(`<div id='history-card'><p>${ingredientsArray}</p></div>`)
-    
-    //sets local storage to the most recent search
-    localStorage.setItem('srchHistory', ingredientsArray)
+function createHistoryButton(ingredientsArray) {
+  //appends searches to search history box
+  historyBox.prepend(`<div id='history-card'><p>${ingredientsArray}</p></div>`)
 }
 
+// Get Most recent search query data
 function getStoredQuery() {
   if ( localStorage.getItem('queryArray') != null) {
     var savedData = JSON.parse(localStorage.getItem('queryArray'));
@@ -258,46 +253,39 @@ class RecipeCard {
     this.usedIngredientCount = recipeObject.usedIngredientCount;
     this.usedIngredients = recipeObject.usedIngredients;
 
-    this.buildCardById = function buildCardById() {
+    this.buildCard = function buildCard() {
       // Build Card Elements with selected data provided by the Spoonacular API
       let newRecipeCard = $('<div>').addClass("recipeCard").attr('data-id', this.id);
       let newRecipeTitle = $('<h3>').addClass("recipeTitle").text(this.title);
       let newRecipeImage = $('<img>').addClass("recipeImage").attr('src', this.image);
       let newRecipeOl = $('<ol>').addClass("ingredientList").attr('data-id', this.id);
       newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
+
       this.usedIngredients.forEach((ele) => {
-        newRecipeIngUsed = $('<li>').addClass("usedIngredient").attr({'data-id': this.id, 'aisle': ele.aisle}).text(ele.originalString);
+        let newRecipeIngUsed = $('<li>').addClass("usedIngredient").attr({'data-id': this.id, 'aisle': ele.aisle}).text(ele.originalString);
         newRecipeOl.append(newRecipeIngUsed);
-      })
+      });
+
       this.missedIngredients.forEach((ele2) => {
-        newRecipeIngMiss = $('<li>').addClass("missIngredient").attr({'data-id': this.id, 'aisle': ele2.aisle}).text(ele2.originalString);
+        let newRecipeIngMiss = $('<li>').addClass("missIngredient").attr({'data-id': this.id, 'aisle': ele2.aisle}).text(ele2.originalString);
         newRecipeOl.append(newRecipeIngMiss);
-      })
+      });
 
       return newRecipeCard;
     };  
   }
 }
 
-//Build cards when called
-function buildAllCards (recipesArray) {
-  $('.recipeCard').remove();
-  recipesArray.forEach ((element) => {
-    newRecipeCard = $('<div class="recipeCard" data-id='+element.id+'></div>');
-    newRecipeTitle = $('<h3 class="recipeTitle" data-id='+element.id+'>'+element.title+'</h3>');
-    newRecipeImage = $('<img class="recipeImage" src='+element.image+' data-id='+element.id+'>');
-    newRecipeOl = $('<ol class="ingredientList" data-id='+element.id+' "></ol>');
-    newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
-    element.usedIngredients.forEach((ele) => {
-      newRecipeIngUsed = $('<li class="usedIngredient" data-id='+element.id+' aisle="'+ele.aisle+'">'+ele.originalString+'</li>');
-      newRecipeOl.append(newRecipeIngUsed);
-    })
-    element.missedIngredients.forEach((ele2) => {
-      newRecipeIngMiss = $('<li class="missIngredient" data-id='+element.id+' aisle="'+ele2.aisle+'">'+ele2.originalString+'</li>');
-      newRecipeOl.append(newRecipeIngMiss);
-    })
-    $('#recipeContainer').append(newRecipeCard);
+// Recipe Id from Title
+function getRecipeId(recipeTitle) {
+  let savedData = getStoredQuery();
+  let recipe = savedData.find(recipe => {
+    return recipe.title == recipeTitle;
   })
+
+  let recipeId = recipe.id;
+
+  return recipeId;
 }
 
 // Get Recipie by Id
@@ -305,11 +293,11 @@ function getRecipeById(id) {
   let savedData = getStoredQuery();
   let recipeObject = savedData.find(recipe => {
     return recipe.id == id;
-  })
+  });
   
   let newRecipeCard = new RecipeCard(recipeObject);
 
-  return newRecipeCard.buildCardById();
+  return newRecipeCard.buildCard();
 }
 
 // Compare Section Logic
@@ -319,9 +307,11 @@ function compareSlotSelect(recipeId) {
   // Append Card to the Recipe Compare Container
   if (slot1.children().length < 1) {
     slot1.append(recipeCard);
+    slotHasFocus = 'slot1';
     
   } else if (slot2.children().length < 1){
     slot2.append(recipeCard);
+    slotHasFocus = 'slot2';
 
   } else {
     // Select Slot By Last Focus
@@ -339,17 +329,53 @@ function compareSlotSelect(recipeId) {
   }
 }
 
+// User
+class User {
+  constructor(userName = 'default') {
+    this.name = userName;
+    this.lastRecipeSearched = "";
+    this.searchedRecipes = [];
+    this.isNewUser = true;
+  }
+  
+  addSearchedIngredients = function (searchedIngredientsString) {
+    this.searchedRecipes.push(searchedIngredientsString);
+  }
+}
+
+function save(user) {
+  // Save User city and saved searched cities to localStorage
+  user.isNewUser = false;
+  console.log(user);
+  try {
+    localStorage.setItem('user', JSON.stringify(user));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function load() {
+  // Load User from localStorage
+  try {
+    let userData = JSON.parse(localStorage.getItem('user'));
+    console.log('userData LOAD: ', userData);
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 // Added Button Event Listeners
 menuBtn.on('click', printDropMenu)
 mainSrchBtn && mainSrchBtn.on('click', searchAndSave);
 findRecipeBtn && findRecipeBtn.on('click', goToMain);
 
-// TODO: Update this to word cloud button event once available
-recipeContainer && recipeContainer.on('click', (event) => {
-  let recipeId = $(event.target).attr('data-id');
-
-  compareSlotSelect(recipeId)
-});
+// Click function for wordcloud items
+wordcloudDivEl.on('click', function(e){
+  let recipeTitle = e.target.textContent;
+  let recipeId = getRecipeId(recipeTitle);
+  compareSlotSelect(recipeId);
+})
 
 // To give last used Recipe Container focus so we know which recipe should be switched out
 recipeCompareContainer && recipeCompareContainer.on('click', (event) => {
@@ -364,16 +390,19 @@ recipeCompareContainer && recipeCompareContainer.on('click', (event) => {
 // Search from history list
 historyBox.on('click', function(event){
   let clickValue = event.target.textContent
-  searchByIngredients(clickValue)
+  let ingredientsArray = clickValue.trim().split(',');
+  searchByIngredients(ingredientsArray);
 });
 
-// Click function for wordcloud items
-wordcloudDivEl.on('click', function(e){
-  let clickValue = e.target.textContent
-})
-
+// Landing Page Entry Point
 // Add JOTD to landing page, check if 24hours has passed since last call
 if (window.location.pathname.endsWith('index.html')) {
+  // Create New User
+  if (user === undefined || user === null) {
+    var user = new User('land');
+    save(user);
+  }
+  
   if (localStorage.getItem('day1') == null) { 
     localStorage.setItem('day1', Date.now());
     addJoke();
@@ -387,23 +416,36 @@ if (window.location.pathname.endsWith('index.html')) {
   }
 }
 
-// Functions on switch to Main Page
-if (window.location.pathname.includes('main.html')) {
-  let ingredientsList = populateMainSearch();
-  searchByIngredients(ingredientsList);
-} 
+// Verify User
+function userDataExists() {
+  try {
+    let user = JSON.parse(localStorage.getItem('user'));
+    return user;
 
-// DEBUG Tools:
-//
-//
-/*Rebuilder button for dev purposes (or to keep?), 
-will use a localy store search result array to build cards 
-again without a new query*/
-$('#rebuildCards').on('click', rebuildCards);
-
-function rebuildCards() {
-  let savedData = getStoredQuery();
-  buildAllCards(savedData);
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 }
 
-// DEBUG END
+// Functions on switch to Main Page
+if (window.location.pathname.includes('main.html')) {
+  // Get existing search data on load
+  user = userDataExists();
+
+  if(user) {
+    user.searchedRecipes.forEach(ingredientsList => {
+      createHistoryButton(ingredientsList);
+    });
+
+  } else {
+    var user = new User('main');
+  };
+  
+  console.log('After Load: ', user);
+
+  let ingredientsList = populateMainSearch();
+  let ingredientsArray = ingredientsList.trim().split(',');
+  
+  searchByIngredients(ingredientsArray);
+}
