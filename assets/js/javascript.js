@@ -233,6 +233,7 @@ function printHistory(ingredientsArray) {
     localStorage.setItem('srchHistory', ingredientsArray)
 }
 
+// Get Most recent search query data
 function getStoredQuery() {
   if ( localStorage.getItem('queryArray') != null) {
     var savedData = JSON.parse(localStorage.getItem('queryArray'));
@@ -300,6 +301,7 @@ function buildAllCards (recipesArray) {
   })
 }
 
+// Recipe Id from Title
 function getRecipeId(recipeTitle) {
   let savedData = getStoredQuery();
   let recipe = savedData.find(recipe => {
@@ -355,13 +357,12 @@ menuBtn.on('click', printDropMenu)
 mainSrchBtn && mainSrchBtn.on('click', searchAndSave);
 findRecipeBtn && findRecipeBtn.on('click', goToMain);
 
-// TODO: Update this to word cloud button event once available
-recipeContainer && recipeContainer.on('click', (event) => {
-  let recipeId = $(event.target).attr('data-id');
-
-  compareSlotSelect(recipeId)
-});
-
+// Click function for wordcloud items
+wordcloudDivEl.on('click', function(e){
+  let recipeTitle = e.target.textContent;
+  let recipeId = getRecipeId(recipeTitle);
+  compareSlotSelect(recipeId);
+})
 // To give last used Recipe Container focus so we know which recipe should be switched out
 recipeCompareContainer && recipeCompareContainer.on('click', (event) => {
   // Check if the clicked target is a slot 1 or 2 item
@@ -379,12 +380,6 @@ historyBox.on('click', function(event){
   searchByIngredients(ingredientsArray);
 });
 
-// Click function for wordcloud items
-wordcloudDivEl.on('click', function(e){
-  let recipeTitle = e.target.textContent;
-  let recipeId = getRecipeId(recipeTitle);
-  compareSlotSelect(recipeId);
-})
 
 // Add JOTD to landing page, check if 24hours has passed since last call
 if (window.location.pathname.endsWith('index.html')) {
