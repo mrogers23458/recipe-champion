@@ -9,6 +9,9 @@
     <!--local link to stylesheet-->
     <link rel="stylesheet" href="./css/style.css">
     <title>RC Main</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hahmlet:wght@300&family=STIX+Two+Text:ital,wght@1,500&display=swap');
+        </style>
 </head>
 <body>
     <!--Title bar built with foundation-->
@@ -18,37 +21,47 @@
           <div id="myDropDown" class="dropdown-content">
             <ul>
                 <li><a href="../index.html">Home</a></li>
-                <li><a href="/assets/main.html">Recipes</a></li>
+                <li><a href="main.html">Recipes</a></li>
             </ul>
 
           </div>
           <span class="title-bar-title">Recipe Champion</span>
+        </div>
+        <div class="title-bar-right">
+            <button id="rebuildCards" type="button">Rebuild Cards</button>
         </div>
     </div>
     <!--Wraps all of the content on the main page-->
     <div class="main-content-wrapper">
         <!--wrapper for both search box and search history-->
         <div class="search-history-container">
+            <!--Container for left side-->
             <!-- wrapper for just the search box-->
             <div class="search-wrapper">
-                <p class="h1 text-center">Recipe Champion</p>
+                <p class="h1-text-center">Recipe Champion</p>
                 <p class="lead text-center">Enter ingredients and search for new recipes</p>
-                <input id="searchInput" type="text" placeholder="milk, eggs, butter, cinnamon">
-                <button id="main-search" class="button expanded">Find recipes</button>
-            </div>
+                <input id="main-search-input" type="text" placeholder="milk, eggs, butter, cinnamon">
+                <button id="main-search-btn" class="button expanded">Find recipes</button>
             <!--wrapper for just the search history-->
             <!--append search history to this div-->
             <div class="history-wrapper"></div>
-            <!--Foundation CSS-->
-            <div class="work-feature-block row">
-                <h2 class="work-feature-block-header text-center">You're just one click away from the perfect recipe!</h2>
-                <div class="columns medium-7">
-                    <div class="word-cloud-center">
-                        <!--sample image placeholder that will hopefully be replaced by dynamically generated word cloud-->
-                        <!--dynamically generated content should be given this class, or appended here-->
-                        <img class="work-feature-block-image" src="./sampleWordCloudImage.jpg"/>
+            </div>
+
+            <!--Container for right side-->
+            <div id="contentContainer">
+                <!--Foundation CSS-->
+                <div class="work-feature-block row">
+                    <h2 class="work-feature-block-header text-center">You're just one click away from the perfect recipe!</h2>
+                    <div class="columns medium-7">
+                        <div class="word-cloud-center">
+                            <!--sample image placeholder that will hopefully be replaced by dynamically generated word cloud-->
+                            <!--dynamically generated content should be given this class, or appended here-->
+                            <img class="work-feature-block-image" src="./sampleWordCloudImage.jpg"/>
+                        </div>
                     </div>
                 </div>
+                <!--Container to be popluated by recipe cards-->
+                <div id="recipeContainer"></div>
             </div>
         </div>
 

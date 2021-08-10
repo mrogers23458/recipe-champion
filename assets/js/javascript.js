@@ -1,21 +1,20 @@
-//noticed foundation JS is throwing errors in the console, will add as an issue in github
-// variable to target drop down menu button
-var menuBtn = document.getElementById('dropBtn')
+// Global Page Elements
+const menuBtn = $('#dropBtn')
+const dropDownMenu = document.querySelector('.dropdown-content')
 
-//console log to make sure targeting the right element
-console.log(menuBtn)
+// Global Variables
+var lastSearch = [];
 
-// variable to target the find recipe button
-var searchBtn = document.getElementById('search')
+// Landing Page Elements
+const findRecipeBtn = $('#land-find-recipe-btn')
+const leadEl = $('#lead');
 
-//variable for a button that is specific to searching on the main page
-var mainSrchBtn = document.querySelector('main-search')
-
-//drop down menu content holder where items append to
-var dropDownMenu = document.querySelector('.dropdown-content')
+// Main Page Elements
+const mainSrchBtn = $('#main-search-btn')
+const mainSrchInput = $('#main-search-input')
 
 // Spoonacular API Key
-const spoonApiKey = "0dd309d8ae284120be54a47af108d02c";
+const spoonApiKey = "a33faa16cf9b491e818074aba497f961";
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
@@ -65,10 +64,6 @@ var spoonacularUrls = {
   },
 }
 
-// Landing Page Elements
-const btnExpandedEl = $('.button');
-const leadEl = $('.lead');
-
 // Add Joke of the Day
 function addJoke() {
   const jokeEl = $('<p>').addClass('joke h3 text-center');
@@ -83,14 +78,42 @@ function addJoke() {
   jokeEl.insertBefore(leadEl)
 }
 
-// Event listener for Landing page get ingredients button
-btnExpandedEl.on('click', function() {
-  const ingredientInputEl = $('#search');
-  let ingredientsArray = ingredientInputEl.val().replace(/\s/g,'').split(',');
+// Search By Ingredients
+function searchByIngredients() {
+  let ingredientsArray = mainSrchInput.val().replace(/\s/g,'').split(',');
   let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
 
   apiCall(baseUrl);
-});
+}
+
+// Save last search from Landing Page in localStorage
+function saveSearchInput(searchInput) {
+  let ingredientSearchArray = searchInput.replace(/\s/g,'').split(',')
+    
+  try {
+    localStorage.setItem('lastSearch', JSON.stringify(ingredientSearchArray));
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// Redirect to Main Page with 
+function redirectUrlWithParameters(searchInput) {
+  let mainUrl = "./assets/main.html";
+  let params = `?ingredients=${searchInput.replace(/\s/g,'')}`;
+  let targetUrl = mainUrl + params;
+
+  window.location.href = targetUrl;
+  
+  return targetUrl;
+}
+
+// Poplulate Main Search input with localstorage
+function populateMainSearch() {
+  let lastSearch = JSON.parse(localStorage.getItem('lastSearch'))
+  $('#main-search-input').val(lastSearch.join(', '))
+  return lastSearch;
+}
 
 // Create full request url w/optional additional parameters for a Spoonacular API call
 function apiCall(baseUrl, params = {}) {
@@ -123,25 +146,25 @@ function apiCall(baseUrl, params = {}) {
 
 function processSpoonacularData(data) {
   // TODO: Expand to handle various API calls
+  localStorage.setItem('queryArray', JSON.stringify(data));
+  recipeCardBuild(data);
   console.log(data)
   return data;
 }
 
-// Add JOTD to landing page
-addJoke();
-
 function printDropMenu(){
   dropDownMenu.classList.toggle('show')
-  console.log(dropDownMenu)
 }
 //function to redirect to main page
-function goToMain(){
-  window.location.href = "./assets/main.html"
+function goToMain() {
+  let inputValue = $('#land-input').val()
+  saveSearchInput(inputValue);
+  redirectUrlWithParameters(inputValue);
 }
 
 //function to append search results
 function printHistory(){
-
+  //TODO: Add Function
 }
 
 function loadEverything(){
@@ -149,8 +172,50 @@ function loadEverything(){
   apiCall()
 }
 
-//on click runs go to main, so when 'find recipes' button with id 'search' is clicked it re-directs to main content page
+/*Rebuilder button for dev purposes (or to keep?), 
+will use a localy store search result array to build cards 
+again without a new query*/
+$('#rebuildCards').click( function rebuildCards () {
+  if ( localStorage.getItem('queryArray') != null) {
+    savedData = JSON.parse(localStorage.getItem('queryArray'));
+    recipeCardBuild(savedData);
+  } else {
+    console.log('No saved data');
+  }
+});
+//Build cards when called
+function recipeCardBuild (array) {
+  $('.recipeCard').remove();
+    array.forEach ((element,index,array) => {
+      newRecipeCard = $('<div class="recipeCard" name="recipe '+element.id+'"></div>');
+      newRecipeTitle = $('<h3 class="recipeTitle">'+element.title+'</h3>');
+      newRecipeImage = $('<img class="recipeImage" src='+element.image+'>');
+      newRecipeOl = $('<ol class="ingredientList" name="recipe '+element.id+'"></ol>');
+      newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
+      element.usedIngredients.forEach((ele,i,arr) => {
+        newRecipeIngUsed = $('<li class="usedIngredient" aisle="'+ele.aisle+'">'+ele.originalString+'</li>');
+        newRecipeOl.append(newRecipeIngUsed);
+      })
+      element.missedIngredients.forEach((ele2,i2,arr2) => {
+        newRecipeIngMiss = $('<li class="missIngredient" aisle="'+ele2.aisle+'">'+ele2.originalString+'</li>');
+        newRecipeOl.append(newRecipeIngMiss);
+      })
+      $('#recipeContainer').append(newRecipeCard);
+    })
+}
 
-searchBtn && searchBtn.addEventListener('click', loadEverything)
-mainSrchBtn && mainSrchBtn.addEventListener('click', apiCall)
-menuBtn.addEventListener('click', printDropMenu)
+// Added Button Event Listeners
+menuBtn.on('click', printDropMenu)
+mainSrchBtn && mainSrchBtn.on('click', searchByIngredients);
+findRecipeBtn && findRecipeBtn.on('click', goToMain)
+
+// Add JOTD to landing page
+if (window.location.pathname.endsWith('index.html')) {
+  addJoke();
+}
+
+// Functions on switch to Main Page
+if (window.location.pathname.includes('main.html')) {
+  populateMainSearch();
+  searchByIngredients();
+}

@@ -32,7 +32,7 @@ p{
 
 body {
     background-image: url('https://source.unsplash.com/1600x900/?food');
-    background-size: 1285px;
+    background-size: 1300px;
 
 }
 
@@ -40,7 +40,7 @@ body {
     display: flex;
     flex-grow: inherit;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    height: 600px;
+    height: 500px;
     width: 550px;
     padding: 30px;
     align-items: center;
@@ -51,43 +51,27 @@ body {
 
 }
 
+
+.menu-icon{
+    color: blue;
+}
+
 .dropdown-content {
     background-color: rgba(255,255,255,0.5);
     border-radius: 20%;
     height: 80px;
     width: 20px;
-   
-    
+   margin-right: -50px;
+};
+ 
+.btn{
+  background-color: black;
+  cursor: pointer;
 
 }
 
-.home {
-    color:black;
-    text-shadow:whitesmoke;
-    font-weight: 500;
-    font-family:monospace;
-    font-size: 20px;
-}
 
-.button-expanded {
-    background-color: rgb(70, 70, 70);
-    color: white;
-    padding: 10px;
-    border: solid 3px rgb(70, 70, 70);
-    border-radius: 10%;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    font-weight: 600;
-}
 
-.button-expanded:hover{
-    background-color: rgba(122, 120, 120, 0.425);
-    color: black;
-    
-}
-
-#searchInput{
+#land-input{
     border-radius: 10px;
 }
