@@ -24,7 +24,7 @@ const slot1 = $('.recipe-compare-card-1').attr('name', 'slot1');
 const slot2 = $('.recipe-compare-card-2').attr('name', 'slot2');
 
 // Spoonacular API Key
-const spoonApiKey = "c0b01345b7484f1b90b89bab3999317f";
+const spoonApiKey = "";
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
@@ -200,7 +200,7 @@ function goToMain() {
 
   user.lastRecipeSearched = inputValue;
   user.addSearchedIngredients(inputValue);
-  user.save(user)
+  save(user)
 
   redirectMainUrl();
 }
@@ -209,18 +209,20 @@ function goToMain() {
 function searchAndSave(){
   user.lastRecipeSearched = mainSrchInput.val();
   console.log(user)
-  user.searchedRecipes.push(mainSrchInput.val());
+  
   if (!user.searchedRecipes.includes(mainSrchInput.val())) {
-        console.log("user", user.searchedRecipes)
-      
-        let ingredientsArray = mainSrchInput.val().trim().split(',');
-        createHistoryButton(ingredientsArray);
-        searchByIngredients(ingredientsArray);
-        
-      } else {
-        return;
-      }
-      mainSrchInput.val('');
+    user.searchedRecipes.push(mainSrchInput.val());
+    console.log("user", user.searchedRecipes)
+    
+    let ingredientsArray = mainSrchInput.val().trim().split(',');
+    createHistoryButton(ingredientsArray);
+    searchByIngredients(ingredientsArray);
+    save(user);
+    
+  } else {
+    return;
+  }
+  mainSrchInput.val('');
 }
 
 //function to append search results
@@ -336,32 +338,32 @@ class User {
     this.lastRecipeSearched = "";
     this.searchedRecipes = [];
     this.isNewUser = true;
-
-    this.save = function save(user) {
-      // Save User city and saved searched cities to localStorage
-      user.isNewUser = false;
-      console.log(user);
-      try {
-        localStorage.setItem('user', JSON.stringify(user));
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    
-    this.load = function load() {
-      // Load User from localStorage
-      try {
-        let userData = JSON.parse(localStorage.getItem('user'));
-        console.log('userData LOAD: ', userData);
-
-      } catch (error) {
-        console.log(error);
-      }
-    }
   }
   
-  addSearchedIngredients(searchedIngredientsString) {
+  addSearchedIngredients = function (searchedIngredientsString) {
     this.searchedRecipes.push(searchedIngredientsString);
+  }
+}
+
+function save(user) {
+  // Save User city and saved searched cities to localStorage
+  user.isNewUser = false;
+  console.log(user);
+  try {
+    localStorage.setItem('user', JSON.stringify(user));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function load() {
+  // Load User from localStorage
+  try {
+    let userData = JSON.parse(localStorage.getItem('user'));
+    console.log('userData LOAD: ', userData);
+
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -400,7 +402,7 @@ if (window.location.pathname.endsWith('index.html')) {
   // Create New User
   if (user === undefined || user === null) {
     var user = new User('land');
-    user.save(user);
+    save(user);
   }
   
   if (localStorage.getItem('day1') == null) { 
