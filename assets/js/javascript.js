@@ -97,6 +97,76 @@ function addJoke() {
   }
 }
 
+
+// Create full request url w/optional additional parameters for a Spoonacular API call
+function apiCall(baseUrl, params = {}) {
+  let paramsString = ""
+  console.log('Calling spoonacular: ', baseUrl)
+  // Add additional params if provided
+  if (params != null) {
+    for (let [key, value] of Object.entries(params)) {
+      paramsString += `&${key}=${value}`;
+    }
+  };
+  
+  let requestUrl = baseUrl + paramsString;
+  
+  return fetch(requestUrl).then( function(response) {
+    if (!response.status == 200) {
+      // TODO: 404 Redirect
+      alert(`Spoonacular responded with ${response.status}`);
+    }
+    return response.json();
+    
+  }).then( function(data) {
+    processSpoonacularData(data);
+    
+    return data;
+  }).catch((error) => {
+    console.log(error);
+  });
+}
+
+function processSpoonacularData(data) {
+  // Store latest API data query
+  localStorage.setItem('queryArray', JSON.stringify(data));
+  //function call to populate word cloud with fetched Data
+  populateWordCloud(data)
+}
+
+// actual function to populate wordcloud
+function populateWordCloud(data){
+  //iteration for 10 recipes
+  const myTags = []
+  test.innerHTML = ''
+  
+  for(i=0; i < 10; i++){
+    var recipesArray = data[i].title
+    myTags.push(recipesArray)
+  }
+  
+  // renders the word cloud to div with class content, with tags pushed from iteration
+  TagCloud('.content', myTags, {
+    // word cloud rendering options
+    
+    // radius in px
+    radius: 400,
+    
+    // animation speed
+    // slow, normal, fast
+    maxSpeed: 'normal',
+    initSpeed: 'normal',
+    
+    // 0 = top
+    // 90 = left
+    // 135 = right-bottom
+    direction: 135,
+    
+    // interact with cursor move on mouse out
+    keep: true
+  });
+}
+
 // Search By Ingredients
 function searchByIngredients(ingredientsArray) {
   let baseUrl = spoonacularUrls.findByIngredients(ingredientsArray);
@@ -131,76 +201,6 @@ function populateMainSearch() {
   let lastSearch = JSON.parse(localStorage.getItem('lastSearch'))
   $('#main-search-input').val(lastSearch.join(', '))
   return lastSearch;
-}
-
-// Create full request url w/optional additional parameters for a Spoonacular API call
-function apiCall(baseUrl, params = {}) {
-  let paramsString = ""
-  console.log('Calling spoonacular: ', baseUrl)
-  // Add additional params if provided
-  if (params != null) {
-    for (let [key, value] of Object.entries(params)) {
-      paramsString += `&${key}=${value}`;
-    }
-  };
-
-  let requestUrl = baseUrl + paramsString;
-
-  return fetch(requestUrl).then( function(response) {
-    if (!response.status == 200) {
-      // TODO: 404 Redirect
-      alert(`Spoonacular responded with ${response.status}`);
-    }
-    return response.json();
-  
-  }).then( function(data) {
-    processSpoonacularData(data);
-    
-    return data;
-  }).catch((error) => {
-    console.log(error);
-  });
-}
-
-function processSpoonacularData(data) {
-  // Store latest API data query
-  localStorage.setItem('queryArray', JSON.stringify(data));
-  //function call to populate word cloud with fetched Data
-  populateWordCloud(data)
-}
-
-// actual function to populate wordcloud
-function populateWordCloud(data){
-  //iteration for 10 recipes
-  const myTags = []
-  test.innerHTML = ''
-
-  for(i=0; i < 10; i++){
-    var recipesArray = data[i].title
-      myTags.push(recipesArray)
-  }
-  
-  // renders the word cloud to div with class content, with tags pushed from iteration
-  TagCloud('.content', myTags, {
-    // word cloud rendering options
-    
-    // radius in px
-    radius: 400,
-
-    // animation speed
-    // slow, normal, fast
-    maxSpeed: 'normal',
-    initSpeed: 'normal',
-
-    // 0 = top
-    // 90 = left
-    // 135 = right-bottom
-    direction: 135,
-    
-    // interact with cursor move on mouse out
-    keep: true
-});
-
 }
 
 function printDropMenu(){
