@@ -9,7 +9,6 @@ const dropDownMenu = document.querySelector('.dropdown-content');
 const historyBox = $('.history-wrapper');
 
 // Global Variables
-var lastSearch = [];
 var slotHasFocus = "";
 
 // Landing Page Elements
@@ -97,7 +96,6 @@ function addJoke() {
   }
 }
 
-
 // Create full request url w/optional additional parameters for a Spoonacular API call
 function apiCall(baseUrl, params = {}) {
   let paramsString = ""
@@ -131,7 +129,9 @@ function processSpoonacularData(data) {
   // Store latest API data query
   localStorage.setItem('queryArray', JSON.stringify(data));
   //function call to populate word cloud with fetched Data
-  populateWordCloud(data)
+  if (window.location.pathname.includes('main.html') && !mainSrchInput.val() == "") {
+    populateWordCloud(data)
+  }
 }
 
 // actual function to populate wordcloud
@@ -174,32 +174,19 @@ function searchByIngredients(ingredientsArray) {
   apiCall(baseUrl);
 }
 
-// Save last search from Landing Page in localStorage
-function saveSearchInput(searchInput) {
-  let ingredientSearchArray = searchInput.trim().split(',')
-    
-  try {
-    localStorage.setItem('lastSearch', JSON.stringify(ingredientSearchArray));
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 // Redirect to Main Page with 
-function redirectUrlWithParameters(searchInput) {
-  let mainUrl = "./assets/main.html";
-  let params = `?ingredients=${searchInput.trim()}`;
-  let targetUrl = mainUrl + params;
+function redirectMainUrl() {
+  let targetUrl = "./assets/main.html";
 
   window.location.href = targetUrl;
   
   return targetUrl;
 }
 
-// Poplulate Main Search input with localstorage
+// Populate Main Search input with localstorage
 function populateMainSearch() {
-  let lastSearch = JSON.parse(localStorage.getItem('lastSearch'))
-  $('#main-search-input').val(lastSearch.join(', '))
+  let lastSearch = user.lastRecipeSearched;
+  mainSrchInput.val(lastSearch);
   return lastSearch;
 }
 
@@ -210,20 +197,34 @@ function printDropMenu(){
 //function to redirect to main page
 function goToMain() {
   let inputValue = $('#land-input').val()
-  saveSearchInput(inputValue);
-  redirectUrlWithParameters(inputValue);
+
+  user.lastRecipeSearched = inputValue;
+  user.addSearchedIngredients(inputValue);
+  user.save(user)
+
+  redirectMainUrl();
 }
 
 // function to do a search by ingredients, and append the search terms to the history box
 function searchAndSave(){
-  let ingredientsArray = mainSrchInput.val().trim().split(',');
-  searchByIngredients(ingredientsArray)
-  printHistory(ingredientsArray)
+  user.lastRecipeSearched = mainSrchInput.val();
+  console.log(user)
+  user.searchedRecipes.push(mainSrchInput.val());
+  if (!user.searchedRecipes.includes(mainSrchInput.val())) {
+        console.log("user", user.searchedRecipes)
+      
+        let ingredientsArray = mainSrchInput.val().trim().split(',');
+        createHistoryButton(ingredientsArray);
+        searchByIngredients(ingredientsArray);
+        
+      } else {
+        return;
+      }
+      mainSrchInput.val('');
 }
 
 //function to append search results
-function printHistory(ingredientsArray) {
-  console.log(ingredientsArray)
+function createHistoryButton(ingredientsArray) {
   //appends searches to search history box
   historyBox.append(`<div id='history-card'><p>${ingredientsArray}</p></div>`)
 }
@@ -263,12 +264,12 @@ class RecipeCard {
       this.usedIngredients.forEach((ele) => {
         let newRecipeIngUsed = $('<li>').addClass("usedIngredient").attr({'data-id': this.id, 'aisle': ele.aisle}).text(ele.originalString);
         newRecipeOl.append(newRecipeIngUsed);
-      })
+      });
 
       this.missedIngredients.forEach((ele2) => {
         let newRecipeIngMiss = $('<li>').addClass("missIngredient").attr({'data-id': this.id, 'aisle': ele2.aisle}).text(ele2.originalString);
         newRecipeOl.append(newRecipeIngMiss);
-      })
+      });
 
       return newRecipeCard;
     };  
@@ -328,6 +329,42 @@ function compareSlotSelect(recipeId) {
   }
 }
 
+// User
+class User {
+  constructor(userName = 'default') {
+    this.name = userName;
+    this.lastRecipeSearched = "";
+    this.searchedRecipes = [];
+    this.isNewUser = true;
+
+    this.save = function save(user) {
+      // Save User city and saved searched cities to localStorage
+      user.isNewUser = false;
+      console.log(user);
+      try {
+        localStorage.setItem('user', JSON.stringify(user));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    
+    this.load = function load() {
+      // Load User from localStorage
+      try {
+        let userData = JSON.parse(localStorage.getItem('user'));
+        console.log('userData LOAD: ', userData);
+
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+  
+  addSearchedIngredients(searchedIngredientsString) {
+    this.searchedRecipes.push(searchedIngredientsString);
+  }
+}
+
 // Added Button Event Listeners
 menuBtn.on('click', printDropMenu)
 mainSrchBtn && mainSrchBtn.on('click', searchAndSave);
@@ -357,8 +394,15 @@ historyBox.on('click', function(event){
   searchByIngredients(ingredientsArray);
 });
 
+// Landing Page Entry Point
 // Add JOTD to landing page, check if 24hours has passed since last call
 if (window.location.pathname.endsWith('index.html')) {
+  // Create New User
+  if (user === undefined || user === null) {
+    var user = new User('land');
+    user.save(user);
+  }
+  
   if (localStorage.getItem('day1') == null) { 
     localStorage.setItem('day1', Date.now());
     addJoke();
@@ -372,8 +416,35 @@ if (window.location.pathname.endsWith('index.html')) {
   }
 }
 
+// Verify User
+function userDataExists() {
+  try {
+    let user = JSON.parse(localStorage.getItem('user'));
+    return user;
+
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
 // Functions on switch to Main Page
 if (window.location.pathname.includes('main.html')) {
+  // Get existing search data on load
+  user = userDataExists();
+
+  if(user) {
+    user.searchedRecipes.forEach(ingredientsList => {
+      createHistoryButton(ingredientsList);
+    });
+
+  } else {
+    var user = new User('main');
+  };
+  
+  console.log('After Load: ', user);
+
   let ingredientsList = populateMainSearch();
-  searchByIngredients(ingredientsList);
-} 
+  let ingredientsArray = ingredientsList.trim().split(',');
+  searchByIngredients(ingredientsArray);
+}
