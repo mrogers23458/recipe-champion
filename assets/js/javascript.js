@@ -150,7 +150,7 @@ function populateWordCloud(data){
     // word cloud rendering options
     
     // radius in px
-    radius: 400,
+    radius: 200,
     
     // animation speed
     // slow, normal, fast
