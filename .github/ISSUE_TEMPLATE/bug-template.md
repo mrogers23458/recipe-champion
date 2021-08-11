@@ -1,7 +1,7 @@
 ---
 name: Bug Template
 about: Basic requirements for a Bug
-title: "[Bug]"
+title: "[BUG]"
 labels: bug
 assignees: ''
 
