@@ -24,7 +24,9 @@ const slot1 = $('.recipe-compare-card-1').attr('name', 'slot1');
 const slot2 = $('.recipe-compare-card-2').attr('name', 'slot2');
 
 // Spoonacular API Key
+<<<<<<< Updated upstream
 const spoonApiKey = "37d80fa3eddd4a9eacc113d000ed4d45";
+=======
 const spoonApiKey = "02ccc74a4c304a9d99af44116776385b";
 >>>>>>> Stashed changes
 
@@ -119,8 +121,6 @@ function apiCall(baseUrl, params = {}) {
     return response.json();
     
   }).then( function(data) {
-    processSpoonacularData(data);
-    
     if (window.location.pathname.includes('main.html')) {
       processSpoonacularData(data);
     }
