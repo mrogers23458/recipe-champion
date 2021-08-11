@@ -26,24 +26,35 @@ body {
     width: 40vw;
 }
 
+.main-content-wrapper{
+    display: flex;
+}
+
 .background {
     background-color: rgb(14, 22, 20);
 }
 
-h1 {
-    color: beige;
+#heading {
+    color:rgb(235, 229, 229);
+}
+
+#heading:hover {
+    background-color: rgba(161, 159, 159, 0.63);
+    border-radius: 5px;
+    border: solid 1px rgb(190, 190, 190);
+    box-shadow: inset 90px rgb(82, 81, 81);
 }
 
 .search-history-container{
     display: flex;
-    justify-content: center;
-    width: 100%;
+    flex-direction: column;
+    align-items: center;
     margin:  1rem;
 }
 
 .button-expanded {
     background-color: rgba(218, 218, 218, 0.911);
-    padding: 10px;
+    padding: 9px;
     border: 1px solid rgb(131, 130, 130);
     border-radius: 5px;
     font-family: 'Hamlet';
@@ -53,6 +64,7 @@ h1 {
     outline: grey;
     cursor: pointer;
     transition: ease-out 0.4s;
+    margin-bottom: 15px;
 }
 
 .button-expanded:hover {
@@ -68,27 +80,6 @@ h1 {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    width: 30%;
-    font-family: 'Hamlet';
-    
-}
-
-.h1-text-center {
-    font-family: 'Hamlet';
-    font-size: 35px;
-    font-weight: 600;
-    margin-left: 10px;
-    margin-top: 10px;
-    transition: ease-out 0.4s;
-    color: rgb(235, 229, 229)
-
-}
-
-.h1-text-center:hover {
-    background-color: rgba(161, 159, 159, 0.911);
-    border-radius: 5px;
-    border: solid 1px grey;
-    box-shadow: inset 90px rgb(82, 81, 81);
 }
 
 .lead {
@@ -137,6 +128,49 @@ li {
     display: block;
 }
 
+#history-card {
+    background: rgba(255,255,255,0.5);
+    font-size: 1rem;
+    border-radius: 5px;
+    width: 20vw;
+    box-shadow: 3px 3px 3px;
+    text-align: center;
+}
+
+/* This is all wordcloud CSS */
+.tagcloud {
+    font-size: 16px;
+  }
+  
+  .tagcloud--item {
+    color: white;
+    font-family: "Hamlet";
+    font-weight: 700;
+    padding: 2px 4px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  
+  .tagcloud--item:hover {
+    background-color: rgba(102, 101, 101, 0.5);
+    border: 1px solid rgba(175, 175, 175, 0.719);
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    opacity: 1 !important;
+    z-index: 100 !important;
+  }
+  
+  .light .tagcloud--item {
+    color: #fff;
+  }
+  
+  .light .tagcloud--item:hover {
+    background-color: rgba(255,255,255,.1);
+    border: 1px solid #fff;
+  }
+/* word cloud CSS ends here */
 /* Tucker - Don't need to keep any styling the same, the flex box and width stuff is
 important. Some recipes have odd entries so the card width is set to be flexible 
 with what spoontacular gives us. Selectors for applying styles are important */
@@ -159,8 +193,21 @@ with what spoontacular gives us. Selectors for applying styles are important */
 #contentContainer {
     display: flex;
     flex-direction: column;
-    width: 100%;
-  
+    width: 60%;
+}
+
+#recipe-compare-container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+}
+
+[class^="recipe-compare-card"] {
+    flex: 0 1 50%;
+    min-height: 500px;
+    /* Temp Border */
+    border: 2px solid white; 
+    border-radius: 5px;
 }
 
 .work-feature-block-header {
@@ -189,10 +236,6 @@ with what spoontacular gives us. Selectors for applying styles are important */
 .recipeCard {
     display: flex;
     flex-direction: column;
-    align-content: center;
-    justify-content: flex-start;
-    align-items: center;
-    max-width: max-content;
     margin: .5rem;
     background-color: rgba(255,255,255,0.5);
     border-radius: .5em;
@@ -207,6 +250,10 @@ with what spoontacular gives us. Selectors for applying styles are important */
 .recipeCard:hover {
     background-color: grey;
     border: solid 1px white;
+}
+
+.recipeCard > * {
+    word-wrap: break-word;
 }
 
 .recipeCard img {
@@ -236,4 +283,3 @@ with what spoontacular gives us. Selectors for applying styles are important */
     font-style: italic;
     text-decoration: underline;
 }
-

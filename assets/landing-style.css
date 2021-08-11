@@ -13,15 +13,18 @@
     font-size: 40px;
     font-weight: 600;
     margin-top: 50px;
+    color: black;
     font-family: 'Hahmlet', serif;
     font-family: 'STIX Two Text', serif;;
 }
 
 p{
-    font-size: 15px;
+    font-size: 25px;
     font-weight: 500;
     font-family: 'Hahmlet', serif;
     font-family: 'STIX Two Text', serif;
+    margin-top: 50px;
+    text-align: center;
 }
 
 #search{
@@ -49,12 +52,7 @@ body {
     background-color: rgba(255,255,255,0.5);
     box-shadow: rgba(197, 197, 197, 0.493);
 
-}
-
-
-.menu-icon{
-    color: blue;
-}
+};
 
 .dropdown-content {
     background-color: rgba(255,255,255,0.5);
@@ -71,6 +69,9 @@ body {
 
 
 
-#land-input{
+.searchbar{
     border-radius: 10px;
+    padding: 20px;
+    margin-top: 50px;
 }
+

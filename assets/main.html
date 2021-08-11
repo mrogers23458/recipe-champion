@@ -27,9 +27,6 @@
           </div>
           <span class="title-bar-title">Recipe Champion</span>
         </div>
-        <div class="title-bar-right">
-            <button id="rebuildCards" type="button">Rebuild Cards</button>
-        </div>
     </div>
     <!--Wraps all of the content on the main page-->
     <div class="main-content-wrapper">
@@ -38,43 +35,49 @@
             <!--Container for left side-->
             <!-- wrapper for just the search box-->
             <div class="search-wrapper">
-                <p class="h1-text-center">Recipe Champion</p>
-                <p class="lead">Enter ingredients and search for new recipes</p>
-                <input id="main-search-input"  class="searchbar" type="text" placeholder="milk, eggs, butter, cinnamon">
+                <p class="h1 text-center" id="heading">Recipe Champion</p>
+                <p class="lead text-center">Enter ingredients and search for new recipes</p>
+                <input id="main-search-input" type="text" placeholder="milk, eggs, butter, cinnamon">
                 <button id="main-search-btn" class="button-expanded">Find recipes</button>
-            <!--wrapper for just the search history-->
-            <!--append search history to this div-->
-            <div class="history-wrapper"></div>
             </div>
-
-            <!--Container for right side-->
-            <div id="contentContainer">
-                <!--Foundation CSS-->
-                <div class="work-feature-block row">
-                    <h2 class="work-feature-block-header">You're just one click away from the perfect recipe!</h2>
-                    <div class="columns medium-7">
-                        <div class="word-cloud-center">
-                            <!--sample image placeholder that will hopefully be replaced by dynamically generated word cloud-->
-                            <!--dynamically generated content should be given this class, or appended here-->
-                            <img class="work-feature-block-image" src="./sampleWordCloudImage.jpg"/>
-                        </div>
-                    </div>
-                </div>
-                <!--Container to be popluated by recipe cards-->
-                <div id="recipeContainer"></div>
+            <!--wrapper for just the search history-->
+            <div class="history-container">
+                <div class="history-wrapper"></div>
             </div>
         </div>
-
+        <!--Container for right side-->
+        <div id="contentContainer">
+            <!--Foundation CSS-->
+            <div class="work-feature-block row">
+                <h2 class="work-feature-block-header text-center">You're just one click away from the perfect recipe!</h2>
+                <div class="columns medium-7">
+                    <div class="word-cloud-center">
+                        <!--dynamically generated content should be given this class, or appended here-->
+                        <div id="wordCloudHolderEl" class="content"></div>
+                    </div>
+                    <!-- Recipe Compare Section -->
+                    <div>
+                        <h3>Compare Recipes</h3>
+                    </div>
+                    <div id="recipe-compare-container">
+                        <div class="recipe-compare-card-1"></div>
+                        <div class="recipe-compare-card-2"></div>
+                    </div>
+                    <!--Container to be popluated by recipe cards-->
+                    <div id="recipeContainer"></div>
+                </div>
+            </div>
+        </div>
     </div>
-    
 
     <!-- JQuery CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <!-- Foundation Compressed JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js" integrity="sha256-pRF3zifJRA9jXGv++b06qwtSqX1byFQOLjqa2PTEb2o=" crossorigin="anonymous"></script>
+    <!--Word Cloud Sphere Link-->
+    <script src="./TagCloud-master/dist/TagCloud.min.js"></script>
     <!--local link to javascript-->
     <script src="./js/javascript.js"></script>
-
 </body>
 </html>
