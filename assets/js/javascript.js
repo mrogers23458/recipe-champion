@@ -175,7 +175,7 @@ function searchByIngredients(ingredientsArray) {
 
 // Redirect to Main Page with 
 function redirectMainUrl() {
-  let targetUrl = "./assets/main.html";
+  let targetUrl = "../assets/main.html";
 
   window.location.href = targetUrl;
   
@@ -398,7 +398,7 @@ historyBox.on('click', function(event){
 // Add JOTD to landing page, check if 24hours has passed since last call
 if (window.location.pathname.endsWith('index.html')) {
   // Create New User
-  if (user === undefined || user === null) {
+  if (undefined == user || null === user) {
     var user = new User('land');
     save(user);
   }
