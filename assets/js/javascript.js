@@ -25,6 +25,8 @@ const slot2 = $('.recipe-compare-card-2').attr('name', 'slot2');
 
 // Spoonacular API Key
 const spoonApiKey = "37d80fa3eddd4a9eacc113d000ed4d45";
+const spoonApiKey = "02ccc74a4c304a9d99af44116776385b";
+>>>>>>> Stashed changes
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
@@ -119,6 +121,9 @@ function apiCall(baseUrl, params = {}) {
   }).then( function(data) {
     processSpoonacularData(data);
     
+    if (window.location.pathname.includes('main.html')) {
+      processSpoonacularData(data);
+    }
     return data;
   }).catch((error) => {
     console.log(error);
