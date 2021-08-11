@@ -396,7 +396,9 @@ historyBox.on('click', function(event){
 
 // Landing Page Entry Point
 // Add JOTD to landing page, check if 24hours has passed since last call
-if (window.location.pathname.endsWith('index.html')) {
+if (window.location.pathname.endsWith('index.html')
+    || window.location.pathname.endsWith('docs/')
+    || window.location.pathname.endsWith('recipe-champion/')) {
   // Create New User
   if (undefined == user || null === user) {
     var user = new User('land');
