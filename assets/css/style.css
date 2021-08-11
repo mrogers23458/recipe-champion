@@ -6,6 +6,11 @@
  
 }
 
+body {
+    background-image: url('https://images.unsplash.com/photo-1447078806655-40579c2520d6?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTJ8fGZvb2R8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60');
+    background-size: 1300px;
+}
+
 .main-container {
     display: flex;
     flex-direction: column;
@@ -22,7 +27,7 @@
 }
 
 .background {
-    background-color: aquamarine;
+    background-color: rgb(14, 22, 20);
 }
 
 h1 {
@@ -36,11 +41,35 @@ h1 {
     margin:  1rem;
 }
 
+.button-expanded {
+    background-color: rgba(218, 218, 218, 0.911);
+    padding: 10px;
+    border: 1px solid rgb(131, 130, 130);
+    border-radius: 5px;
+    font-family: 'Hamlet';
+    font-weight: 600;
+    box-shadow: 1px 1px 1px 1px rgb(148, 147, 147);
+    color: black;
+    outline: grey;
+    cursor: pointer;
+    transition: ease-out 0.4s;
+}
+
+.button-expanded:hover {
+    background-color:  rgba(148, 147, 147, 0.719);
+    box-shadow: inset 100px rgb(148, 147, 147);
+}
+
+.searchbar {
+    border-radius: 5px;
+}
+
 .search-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     width: 30%;
+    font-family: 'Hamlet';
     
 }
 
@@ -50,8 +79,35 @@ h1 {
     font-weight: 600;
     margin-left: 10px;
     margin-top: 10px;
+    transition: ease-out 0.4s;
+    color: rgb(235, 229, 229)
 
 }
+
+.h1-text-center:hover {
+    background-color: rgba(161, 159, 159, 0.911);
+    border-radius: 5px;
+    border: solid 1px grey;
+    box-shadow: inset 90px rgb(82, 81, 81);
+}
+
+.lead {
+    text-align: center;
+    font-weight: 600;
+    transition: ease-out 0.4s;
+    color: rgb(235, 229, 229);
+}
+
+
+.lead:hover {
+    background-color: rgba(161, 159, 159, 0.911);
+    border-radius: 5px;
+    border: solid 1px grey;
+    box-shadow: inset 90px rgb(82, 81, 81);
+}
+    
+
+
 
 .row{
     margin: 3rem;
@@ -91,6 +147,7 @@ with what spoontacular gives us. Selectors for applying styles are important */
 
 .work-feature-block-image {
     max-height: 20em;
+    background-blend-mode: initial;
 }
 
 #rebuildCards {
@@ -103,7 +160,25 @@ with what spoontacular gives us. Selectors for applying styles are important */
     display: flex;
     flex-direction: column;
     width: 100%;
+  
 }
+
+.work-feature-block-header {
+    font-family: 'Hamlet';
+    transition: ease-out 0.3s;
+    text-align: center;
+    color: rgb(235, 229, 229);
+    text-shadow: 5px black;
+}
+
+.work-feature-block-header:hover {
+    background-color: rgba(161, 159, 159, 0.911);
+    border-radius: 5px;
+    border: solid 1px grey;
+    box-shadow: inset 90px rgb(82, 81, 81);
+}
+
+
 
 #recipeContainer {
     display: flex;
@@ -119,11 +194,19 @@ with what spoontacular gives us. Selectors for applying styles are important */
     align-items: center;
     max-width: max-content;
     margin: .5rem;
-    background-color: rgba(54, 54, 54, 0.205);
+    background-color: rgba(255,255,255,0.5);
     border-radius: .5em;
-    box-shadow: .3rem .3rem .3rem rgba(56, 56, 56, 0.63);
+    border: solid 1px whitesmoke;
+    box-shadow: .3rem .3rem .3rem rgba(56, 56, 56, 0.733);
     padding: 1rem;
     color: rgba(207, 199, 199, 0.637);
+    transition: 0.6s cubic-bezier(0.6);
+    
+}
+
+.recipeCard:hover {
+    background-color: grey;
+    border: solid 1px white;
 }
 
 .recipeCard img {
@@ -145,6 +228,7 @@ with what spoontacular gives us. Selectors for applying styles are important */
 
 .usedIngredient {
     color: black;
+    font-family: 'Hamlet';
 }
 
 .missIngredient {

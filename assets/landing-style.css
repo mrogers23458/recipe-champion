@@ -64,9 +64,8 @@ body {
    margin-right: -50px;
 };
  
-.btn{
-  background-color: black;
-  cursor: pointer;
+.btn {
+  color: aliceblue;
 
 }
 
