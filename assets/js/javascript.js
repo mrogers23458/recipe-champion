@@ -117,8 +117,9 @@ function apiCall(baseUrl, params = {}) {
     return response.json();
     
   }).then( function(data) {
-    processSpoonacularData(data);
-    
+    if (window.location.pathname.includes('main.html')) {
+      processSpoonacularData(data);
+    }
     return data;
   }).catch((error) => {
     console.log(error);
@@ -256,10 +257,11 @@ class RecipeCard {
     this.buildCard = function buildCard() {
       // Build Card Elements with selected data provided by the Spoonacular API
       let newRecipeCard = $('<div>').addClass("recipeCard").attr('data-id', this.id);
-      let newRecipeTitle = $('<h3>').addClass("recipeTitle").text(this.title);
+      // New DIV to allow the h3 title and close button to rest on the same line using flex within the already flex column card
+      let newTitleDiv = $('<div id="cardHeader"><h3 class="'+this.title+'">'+this.title+'</h3><button class ="cardCloseBtt" id="'+this.id+'">X</button></div>');
       let newRecipeImage = $('<img>').addClass("recipeImage").attr('src', this.image);
       let newRecipeOl = $('<ol>').addClass("ingredientList").attr('data-id', this.id);
-      newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
+      newRecipeCard.append(newTitleDiv, newRecipeImage, newRecipeOl);
 
       this.usedIngredients.forEach((ele) => {
         let newRecipeIngUsed = $('<li>').addClass("usedIngredient").attr({'data-id': this.id, 'aisle': ele.aisle}).text(ele.originalString);
@@ -385,6 +387,12 @@ recipeCompareContainer && recipeCompareContainer.on('click', (event) => {
   } else if ($('.recipe-compare-card-2').has($(event.target)).length === 1) {
     slotHasFocus = "slot2";
   }
+})
+
+// To remove recipe cards when close button is clicked
+recipeCompareContainer.on('click', '.cardCloseBtt', (event) => {
+  cardCloseTarget = event.target.getAttribute('id');
+  $(".recipeCard[data-id*='"+cardCloseTarget+"']").remove();
 })
 
 // Search from history list
