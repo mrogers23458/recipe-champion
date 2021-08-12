@@ -9,7 +9,7 @@ const dropDownMenu = document.querySelector('.dropdown-content');
 const historyBox = $('.history-wrapper');
 
 // Global Variables
-var slotHasFocus = "";
+var slotHasFocus = "37d80fa3eddd4a9eacc113d000ed4d45";
 
 // Landing Page Elements
 const findRecipeBtn = $('#land-find-recipe-btn');
