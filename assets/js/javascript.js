@@ -24,7 +24,11 @@ const slot1 = $('.recipe-compare-card-1').attr('name', 'slot1');
 const slot2 = $('.recipe-compare-card-2').attr('name', 'slot2');
 
 // Spoonacular API Key
+<<<<<<< HEAD
 const spoonApiKey = "a33faa16cf9b491e818074aba497f961";
+=======
+const spoonApiKey = "37d80fa3eddd4a9eacc113d000ed4d45";
+>>>>>>> main
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
@@ -175,7 +179,7 @@ function searchByIngredients(ingredientsArray) {
 
 // Redirect to Main Page with 
 function redirectMainUrl() {
-  let targetUrl = "./assets/main.html";
+  let targetUrl = "../assets/main.html";
 
   window.location.href = targetUrl;
   
@@ -396,9 +400,11 @@ historyBox.on('click', function(event){
 
 // Landing Page Entry Point
 // Add JOTD to landing page, check if 24hours has passed since last call
-if (window.location.pathname.endsWith('index.html')) {
+if (window.location.pathname.endsWith('index.html')
+    || window.location.pathname.endsWith('docs/')
+    || window.location.pathname.endsWith('recipe-champion/')) {
   // Create New User
-  if (user === undefined || user === null) {
+  if (undefined == user || null === user) {
     var user = new User('land');
     save(user);
   }
