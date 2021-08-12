@@ -24,11 +24,7 @@ const slot1 = $('.recipe-compare-card-1').attr('name', 'slot1');
 const slot2 = $('.recipe-compare-card-2').attr('name', 'slot2');
 
 // Spoonacular API Key
-<<<<<<< Updated upstream
-const spoonApiKey = "37d80fa3eddd4a9eacc113d000ed4d45";
-=======
 const spoonApiKey = "02ccc74a4c304a9d99af44116776385b";
->>>>>>> Stashed changes
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
@@ -261,10 +257,13 @@ class RecipeCard {
     this.buildCard = function buildCard() {
       // Build Card Elements with selected data provided by the Spoonacular API
       let newRecipeCard = $('<div>').addClass("recipeCard").attr('data-id', this.id);
-      let newRecipeTitle = $('<h3>').addClass("recipeTitle").text(this.title);
+      let newTitleDiv = $('<div id="cardHeader"><h3 class="'+this.title+'">'+this.title+'</h3><button class ="cardCloseBtt" id="button '+this.id+'">X</button></div>');
+      //let newRecipeTitle = $('<h3>').addClass("recipeTitle").text(this.title);
+      //let newRecipeCloseBtt = $('<button id="button'+this.id+'">X</button>');
       let newRecipeImage = $('<img>').addClass("recipeImage").attr('src', this.image);
       let newRecipeOl = $('<ol>').addClass("ingredientList").attr('data-id', this.id);
-      newRecipeCard.append(newRecipeTitle, newRecipeImage, newRecipeOl);
+      //newRecipeCard.append(newRecipeTitle, newRecipeCloseBtt, newRecipeImage, newRecipeOl);
+      newRecipeCard.append(newTitleDiv, newRecipeImage, newRecipeOl);
 
       this.usedIngredients.forEach((ele) => {
         let newRecipeIngUsed = $('<li>').addClass("usedIngredient").attr({'data-id': this.id, 'aisle': ele.aisle}).text(ele.originalString);

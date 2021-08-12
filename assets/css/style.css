@@ -112,10 +112,13 @@ with what spoontacular gives us. Selectors for applying styles are important */
     max-height: 20em;
 }
 
-#rebuildCards {
-    color: white;
-    padding: .3rem;
-    font-size: 1em;
+#cardHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cardCloseBtt {
+    color: whitesmoke;
 }
 
 #contentContainer {
