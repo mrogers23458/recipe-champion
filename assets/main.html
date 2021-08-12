@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation.min.css" integrity="sha256-ogmFxjqiTMnZhxCqVmcqTvjfe1Y/ec4WaRj/aQPvn+I=" crossorigin="anonymous">        
     <!--local link to stylesheet-->
     <link rel="stylesheet" href="./css/style.css">
+    <!-- Google Search -->
+    <script async src="https://cse.google.com/cse.js?cx=c2814624162df8fe5"></script>
     <title>RC Main</title>
 </head>
 <body>
@@ -17,15 +19,12 @@
           <button id="dropBtn" class="menu-icon" type="button"></button>
           <div id="myDropDown" class="dropdown-content">
             <ul>
-                <li><a href="../index.html">Home</a></li>
+                <li><a href="../docs/index.html">Home</a></li>
                 <li><a href="main.html">Recipes</a></li>
             </ul>
 
           </div>
           <span class="title-bar-title">Recipe Champion</span>
-        </div>
-        <div class="title-bar-right">
-            <button id="rebuildCards" type="button">Rebuild Cards</button>
         </div>
     </div>
     <!--Wraps all of the content on the main page-->
@@ -39,24 +38,44 @@
                 <p class="lead text-center">Enter ingredients and search for new recipes</p>
                 <input id="main-search-input" type="text" placeholder="milk, eggs, butter, cinnamon">
                 <button id="main-search-btn" class="button expanded">Find recipes</button>
+            </div>
             <!--wrapper for just the search history-->
+<<<<<<< HEAD
             <div class="history-wrapper"></div>
+=======
+            <div class="history-container">
+                <div class="history-wrapper"></div>
+>>>>>>> main
             </div>
         </div>
-        <!--Foundation CSS-->
-        <div class="work-feature-block row">
-            <h2 class="work-feature-block-header text-center">You're just one click away from the perfect recipe!</h2>
-            <div class="columns medium-7">
-                <div class="word-cloud-center">>
-                    <!--dynamically generated content should be given this class, or appended here-->
-                    <div id="wordCloudHolderEl" class="content"></div>
+        <!--Container for right side-->
+        <div id="contentContainer">
+            <!--Foundation CSS-->
+            <div class="work-feature-block row">
+                <h2 class="work-feature-block-header text-center">You're just one click away from the perfect recipe!</h2>
+                <div class="columns medium-7">
+                    <div class="word-cloud-center">
+                        <!--dynamically generated content should be given this class, or appended here-->
+                        <div id="wordCloudHolderEl" class="content"></div>
+                    </div>
+                    <!-- Recipe Compare Section -->
+                    <div>
+                        <h3>Compare Recipes</h3>
+                    </div>
+                    <div id="recipe-compare-container">
+                        <div class="recipe-compare-card-1"></div>
+                        <div class="recipe-compare-card-2"></div>
+                    </div>
+                                        
+                    <!-- Google PSearch -->
+                    <div class="gcse-search"></div>
+                    
+                    <!--Container to be popluated by recipe cards-->
+                    <div id="recipeContainer"></div>
                 </div>
-                <!--Container to be popluated by recipe cards-->
-                <div id="recipeContainer"></div>
             </div>
         </div>
     </div>
-    
 
     <!-- JQuery CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -67,7 +86,5 @@
     <script src="./TagCloud-master/dist/TagCloud.min.js"></script>
     <!--local link to javascript-->
     <script src="./js/javascript.js"></script>
-
-
 </body>
 </html>

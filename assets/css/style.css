@@ -98,9 +98,13 @@ li {
   .light .tagcloud--item:hover {
     background-color: rgba(255,255,255,.1);
     border: 1px solid #fff;
+<<<<<<< HEAD
   }
 /* word cloud CSS ends here */
 
+=======
+  }  /* word cloud CSS ends here */
+>>>>>>> main
 
 /* Tucker - Don't need to keep any styling the same, the flex box and width stuff is
 important. Some recipes have odd entries so the card width is set to be flexible 
@@ -123,7 +127,25 @@ with what spoontacular gives us. Selectors for applying styles are important */
 #contentContainer {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 60%;
+}
+
+#recipe-compare-container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    border: 2px solid black;
+    border-radius: 20px 20px;
+}
+
+[class^="recipe-compare-card"] {
+    flex: 0 1 50%;
+    min-height: 500px;
+    border-radius: 20px 20px;
+}
+
+[class^="recipe-compare-card"]:focus {
+    border: 2px solid pink;
 }
 
 #recipeContainer {
@@ -135,16 +157,16 @@ with what spoontacular gives us. Selectors for applying styles are important */
 .recipeCard {
     display: flex;
     flex-direction: column;
-    align-content: center;
-    justify-content: flex-start;
-    align-items: center;
-    max-width: max-content;
     margin: .5rem;
     background-color: #1779ba;
     border-radius: .5em;
     box-shadow: .3rem .3rem .3rem black;
     padding: 1rem;
     color: whitesmoke;
+}
+
+.recipeCard > * {
+    word-wrap: break-word;
 }
 
 .recipeCard img {
