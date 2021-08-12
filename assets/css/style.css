@@ -38,11 +38,21 @@ body {
     color:rgb(235, 229, 229);
 }
 
+h3 {
+    color:rgb(235, 229, 229);
+}
+h3:hover {
+  color: rgba(161, 159, 159, 0.63);
+    
+
+}
+
 #heading:hover {
     background-color: rgba(161, 159, 159, 0.63);
     border-radius: 5px;
     border: solid 1px rgb(190, 190, 190);
     box-shadow: inset 90px rgb(82, 81, 81);
+    width: 10px;
 }
 
 .search-history-container{
