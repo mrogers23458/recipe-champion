@@ -100,6 +100,8 @@ li {
     border: 1px solid #fff;
   }
 /* word cloud CSS ends here */
+
+
 /* Tucker - Don't need to keep any styling the same, the flex box and width stuff is
 important. Some recipes have odd entries so the card width is set to be flexible 
 with what spoontacular gives us. Selectors for applying styles are important */
@@ -157,6 +159,10 @@ with what spoontacular gives us. Selectors for applying styles are important */
 
 .recipeCard ol {
     padding-top: 1em;
+}
+
+.recipeCard:hover{
+    border: 5px solid green;
 }
 
 .usedIngredient {
