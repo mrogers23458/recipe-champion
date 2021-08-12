@@ -24,7 +24,7 @@ const slot1 = $('.recipe-compare-card-1').attr('name', 'slot1');
 const slot2 = $('.recipe-compare-card-2').attr('name', 'slot2');
 
 // Spoonacular API Key
-const spoonApiKey = "02ccc74a4c304a9d99af44116776385b";
+const spoonApiKey = "";
 
 // Object to construct Spoonacular Urls
 var spoonacularUrls = {
