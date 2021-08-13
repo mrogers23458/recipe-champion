@@ -75,24 +75,19 @@ var spoonacularUrls = {
 }
 
 // Add Joke of the Day
+const jokeEl = $('<p>').addClass('joke h3 text-center');
+
 function addJoke() {
-  const jokeEl = $('<p>').addClass('joke h3 text-center');
   const jokeRequest = spoonacularUrls.jokeRequest;
   const jokeRequestUrl = spoonacularUrls.constructBaseUrl(jokeRequest);
   //Check if there is already a joke stored, if not do a call, otherwise use stored
   if (localStorage.getItem('todaysJoke') == null) {
     apiCall(jokeRequestUrl).then((data) => {
       jokeObject = data;
-      console.log(jokeObject);
       jokeEl.text(jokeObject.text);
       localStorage.setItem('todaysJoke', jokeObject.text);
       jokeEl.insertBefore(leadEl);
     });
-  } else {
-    jokeObject = localStorage.getItem('todaysJoke');
-    jokeEl.text(jokeObject);
-    console.log(jokeObject);
-    jokeEl.insertBefore(leadEl);
   }
 }
 
@@ -421,6 +416,10 @@ if (window.location.pathname.endsWith('index.html')
     day2 = Date.now();
     if ( (day2-day1) >= 86400 ) { //24 hours = 86400 seconds
       addJoke();
+    } else {
+      jokeObject = localStorage.getItem('todaysJoke');
+      jokeEl.text(jokeObject);
+      jokeEl.insertBefore(leadEl);
     }
     localStorage.setItem('day1', day2);
   }
