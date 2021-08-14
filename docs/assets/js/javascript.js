@@ -171,7 +171,7 @@ function searchByIngredients(ingredientsArray) {
 
 // Redirect to Main Page with 
 function redirectMainUrl() {
-  let targetUrl = "../docs/assets/main.html";
+  let targetUrl = "./assets/main.html";
 
   window.location.href = targetUrl;
   
