@@ -12,4 +12,4 @@ Recipe Champion is a user facing web app that helps people from all walks of lif
 
 
 
-![Recipe-Champion](recipe-champion.jpg)
+
